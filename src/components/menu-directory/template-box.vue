@@ -14,7 +14,7 @@
 		<div class="ui button primary" @click="upload()" style="position: fixed;width: 200px;margin-left:50px;bottom: 20px;">
 			<i class="ui icon cloud upload"></i> 上传图片
 		</div>
-		<input type="file" name="" accept="image/*" id="zr_upload" style="display: none;" @change="uploadAfter($event)" />
+		<input type="file" name="" accept="image/*" id="zr_upload" style="display: none;"/>
 	</div>
 </template>
 
@@ -28,14 +28,6 @@
 		methods: {
 			upload() {
 				$('#zr_upload').click()
-			},
-			uploadAfter(event) {
-				console.log(event)
-				//				console.log(event.target.value)
-				//				var url = {
-				//					'img': event.target.value
-				//				};
-				//				this.imgesCard.push(url)
 			}
 		},
 		created() {
