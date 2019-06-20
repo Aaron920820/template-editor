@@ -1,0 +1,29 @@
+.border_all{
+	position: absolute;
+	background-color: #fff;
+	width: 8px;
+    height: 8px;
+    border: 1px solid rgba(0,0,0,0.3);
+    display: none;
+}
+.zoom_right {
+	cursor: e-resize;
+	top: calc(50% - 4px);
+	right: -4px;
+}
+
+.zoom_rb {
+	cursor: se-resize;
+	right: -5px;
+	bottom: -5px;
+	position: absolute;
+	border-radius: 50%;
+	width: 10px;
+	height: 10px;
+}
+
+.zoom_bottom {
+	cursor: s-resize;
+	bottom: -4px;
+	left: calc(50% - 4px);
+}
