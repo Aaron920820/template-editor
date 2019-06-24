@@ -1,12 +1,12 @@
 <template>
-	<div class="dragtext">
-		<div @focusin="changeInner($event)" @blur="onBlur($event)" ref="abc" class="content" contenteditable="true">2222</div>
-		<div class="zoom_right"></div>
+	<div class="dragpicture" :style="psMsg.textStyle" @click="changeInner(psMsg)">
+		<div @blur="onBlur($event)" class="content" contenteditable="true" @input="changeText" v-cloak v-text="psMsg.defaultVal"></div>
 	</div>
 </template>
 
 <script>
 	export default {
+		props:['psMsg'],
 		data() {
 			return {
 				currentView: 'textBox'
@@ -18,9 +18,13 @@
 			},
 			changeInner(event){
 				var _self = this;
+				this.$emit('setText',event,'textAttribute')
 			},
 			onBlur(event){
 				
+			},
+			changeText($event){
+				this.psMsg['textVal'] = $event.target.innerText
 			}
 		},
 		created() {
@@ -28,7 +32,7 @@
 		},
 		mounted() {
 			var _self = this;
-			$('.dragtext').l_zoom('free').l_drag();
+			$('.dragpicture').l_zoom('free').l_drag();
 			$(".content").click(function(){
 			  $(this).siblings('.border_all').show()
 			  $(this).addClass('onafter')
@@ -48,16 +52,16 @@
 </script>
 
 <style scoped="" lang="scss">
-	.dragtext {
+	.dragpicture {
 		position: absolute;
 		top: 40%;
 		left: calc(50% - 100px);
-		width: 200px;
+		border: 1px solid rgba(255,255,255,0);
 		height: auto;
-		
+		word-break:break-all;
 		.content {
 			height: 100%;
-			text-align: center;
+			border: 1px solid rgba(255,255,255,0);
 			overflow:hidden;
 		    text-overflow:ellipsis;
 		}

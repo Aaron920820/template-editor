@@ -19,9 +19,12 @@
 		<div class="bgi-pack">
 			<div id="zr_case" class="case">
 				<div class="ui three cards">
-					<div class="card" v-for="item in imgesCard">
+					<div class="card" v-for="(item,index) in imgesCard">
 						<div class="image">
-							<img :src="item.img">
+							<img :src="item.img" @click="changeBackground(item.img)">
+							<div class="removeIcon">
+								<i style="color: white;" class="times circle icon" @click="removeImg(index)"></i>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -58,7 +61,7 @@
 				contentView: 'mine',
 				useBgc: 'background: rgb(255, 255, 255)',
 				selectBgc: ['background: rgb(255, 255, 255)', 'background: rgb(30, 206, 211)', 'background: rgb(18, 135, 170)',
-					'background: rgb(0, 182, 240)', 'rgb(94, 200, 243)', 'background: rgb(168, 0, 195)', 'background: rgb(224, 0, 177)',
+					'background: rgb(0, 182, 240)', 'background:rgb(94, 200, 243)', 'background: rgb(168, 0, 195)', 'background: rgb(224, 0, 177)',
 					'background: rgb(255, 0, 126)', 'background: rgb(255, 89, 169)', 'background: rgb(255, 85, 109)', 'background: rgb(0, 234, 198)',
 					'background: rgb(0, 202, 182)', 'background: rgb(0, 157, 105)', 'background: rgb(0, 177, 61)', 'background: rgb(84, 224, 22)', 'background: rgb(172, 225, 136)',
 					'background: rgb(240, 252, 115)', 'background: rgb(248, 230, 0)', 'background: rgb(226, 181, 0)', 'background: rgb(216, 100, 0)', 'background: rgb(255, 114, 0)',
@@ -70,7 +73,7 @@
 		methods: {
 			closebgc(data) {
 				this.useBgc = data;
-
+				this.$emit('transfer',this.useBgc)
 			},
 			toggleItem(lis, idx) {
 				this.contentView = lis.type
@@ -85,6 +88,13 @@
 //					'img': event.target.value
 //				};
 //				this.imgesCard.push(url)
+			},
+			changeBackground(base){
+				var item = 'background: url('+base+')'
+				this.$emit('transfer',item)
+			},
+			removeImg(index){
+				this.imgesCard.splice(index,1)
 			}
 		},
 		created() {
@@ -223,10 +233,19 @@
 					border-radius: 0;
 					background: none;
 					box-shadow: none;
+					position: relative;
 					.image {
 						border-radius: 0;
 						img {
 							border-radius: 0;
+						}
+						.removeIcon{
+							position: absolute;
+							top: -9px;
+							right: -12px;
+							i:hover{
+								color:aqua !important
+							}
 						}
 					}
 					.image:hover {

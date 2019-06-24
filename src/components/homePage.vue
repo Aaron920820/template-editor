@@ -24,17 +24,19 @@
 			<div id="sideBar" class="three wide stretched column">
 				<div id="myConcent" class="ui segment">
 					<keep-alive>
-						<box :is="currentView"></box>
+						<box :is="currentView" @transfer='getbackground' @addText='addText'></box>
 					</keep-alive>
 				</div>
 			</div>
 			<div id="editorIndex" class="thirteen wide column">
-				<div id="editorPage">
-					<text-frame></text-frame>
+				<div id="editorPage" :style='backgroundCss'>
+					<text-frame v-for="(item,index) in textBox" :key="index" :psMsg="item" @setText="setText"></text-frame>
+					<picture-frame></picture-frame>
 				</div>
 			</div>
 			<div id="rightBar" class="three wide column">
 				<div style="background-color: rgb(62,84,115);text-align: center;color: white;">操作</div>
+				<operation :is="operationView" ref='edit'></operation>
 			</div>
 		</div>
 		<!--弹出框-->
@@ -58,16 +60,20 @@
 </template>
 
 <script>
+	import Vue from 'vue';
 	import templateBox from './menu-directory/template-box'
 	import textBox from './menu-directory/text-box'
-	import pictureBox from './menu-directory/background-box'
+	import background from './menu-directory/background-box'
 	import textFrame from './library/text-frame'
+	import pictureFrame from './library/picture-frame'
+	import textAttribute from './operation/text-attribute'
+	import pictureAttribute from './operation/picture-attribute'
 	export default {
 		data() {
 			return {
 				menu: [{
 						name: '背景',
-						type: 'pictureBox',
+						type: 'background',
 						iconClass: 'th large'
 					}, {
 						name: '文字',
@@ -80,44 +86,80 @@
 						iconClass: 'file image'
 					}
 				],
-				currentView: 'pictureBox'
+				currentView: 'background',
+				backgroundCss: '',
+				textBox: [],
+				textId: 0,
+				operationView:''
 			}
 		},
 		methods: {
-			init() {
-
-			},
 			menuToggle(lis) {
 				this.currentView = lis.type
 			},
 			saveTemplate() {
 				$('#savemodal').modal('show')
+			},
+			getbackground(data) {
+				this.backgroundCss = data
+			},
+			addText(data, te) {
+				var _self = this;
+				_self.textId++;
+				var item = {
+					"textId": "text" + _self.textId,
+					"textVal": te,
+					"defaultVal":te,
+					"Class": "",
+					"textStyle": {
+						"top": "50%",
+						"left": "45%",
+						"z-index": "1",
+						"color": "",
+						"font-size": data,
+						"text-align": "",
+						"writing-mode": "",
+						"font-family": "",
+						"letter-spacing": "",
+						"background-color": "",
+						"line-height": "1"
+					}
+				}
+				_self.textBox.push(item);
+			},
+			setText(data,type){
+				var _self = this;
+				this.operationView = type;
+				Vue.nextTick(function(){
+					_self.$refs.edit.editText(data);
+				})
 			}
-		},
-		created() {
-
 		},
 		mounted() {
 			var _self = this;
+			document.onkeydown = function() {
+				if(window.event && window.event.keyCode == 13) {
+					window.event.returnValue = false;
+				}
+			}
 		},
 		components: {
 			templateBox,
 			textBox,
-			pictureBox,
-			'text-frame': textFrame
+			background,
+			textAttribute,
+			pictureAttribute,
+			'text-frame': textFrame,
+			'picture-frame':pictureFrame
 		}
 
 	}
 </script>
 <style scoped lang="scss">
 	$themeColor:#ffad70;
-	body{
-		
-	}
 	.homePage {
 		width: 100%;
 		height: 100%;
-		
 		.zr_header {
 			background: -webkit-linear-gradient(left bottom, rgb(10, 185, 201), rgb(92, 96, 173));
 			background: -o-linear-gradient(left bottom, rgb(10, 185, 201), rgb(92, 96, 173));
@@ -185,7 +227,7 @@
 				border-radius: 0;
 				z-index: 3;
 				#myConcent {
-					background-color: #3e5473;
+					background-color: rgb(63,70,82);
 					border: none;
 					box-shadow: none;
 					border-radius: 0 !important;
@@ -203,7 +245,6 @@
 				min-width: 650px;
 				min-height: 780px;
 				background-color: rgb(239, 239, 239);
-				
 				#editorPage {
 					width: 432px !important;
 					height: 768px !important;
@@ -211,9 +252,10 @@
 					overflow: hidden;
 					position: relative;
 					margin: 0 auto;
-					outline:2px #00c4cd solid;
+					outline: 2px #00c4cd solid;
+					background-size: 100% 100% !important;
+					background-repeat: no-repeat !important;
 				}
-				
 			}
 			#rightBar {
 				width: 300px !important;
@@ -221,6 +263,7 @@
 				top: 38px;
 				height: 100%;
 				right: 0;
+				padding: 0;
 				background: white;
 				z-index: 2;
 				border-left: 1px solid rgb(215, 215, 215);
