@@ -250,6 +250,7 @@
 					height: 768px !important;
 					background-color: white;
 					overflow: hidden;
+					user-select: none;
 					position: relative;
 					margin: 0 auto;
 					outline: 2px #00c4cd solid;

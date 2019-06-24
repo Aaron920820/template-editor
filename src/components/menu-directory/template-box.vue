@@ -5,7 +5,7 @@
 				<div class="ui three cards">
 					<div class="card" v-for="item in imgesCard">
 						<div class="image">
-							<img :src="item.img">
+							<img :src="item.img" @click="addPicture(item.img)">
 						</div>
 					</div>
 				</div>
@@ -28,6 +28,9 @@
 		methods: {
 			upload() {
 				$('#zr_upload').click()
+			},
+			addPicture(imgUrl){
+				console.log(imgUrl)
 			}
 		},
 		created() {

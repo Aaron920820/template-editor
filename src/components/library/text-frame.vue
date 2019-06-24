@@ -1,5 +1,5 @@
 <template>
-	<div class="dragpicture" :style="psMsg.textStyle" @click="changeInner(psMsg)">
+	<div class="dragtext" :style="psMsg.textStyle" @click="changeInner(psMsg)">
 		<div @blur="onBlur($event)" class="content" contenteditable="true" @input="changeText" v-cloak v-text="psMsg.defaultVal"></div>
 	</div>
 </template>
@@ -32,7 +32,7 @@
 		},
 		mounted() {
 			var _self = this;
-			$('.dragpicture').l_zoom('free').l_drag();
+			$('.dragtext').l_zoom('free').l_drag();
 			$(".content").click(function(){
 			  $(this).siblings('.border_all').show()
 			  $(this).addClass('onafter')
@@ -52,7 +52,7 @@
 </script>
 
 <style scoped="" lang="scss">
-	.dragpicture {
+	.dragtext {
 		position: absolute;
 		top: 40%;
 		left: calc(50% - 100px);
