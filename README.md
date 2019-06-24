@@ -7,6 +7,9 @@
 ``` bash
 # install dependencies
 npm install
+# install sass
+npm install sass-loader --save-dev
+npm install node-sass --sava-dev
 
 # serve with hot reload at localhost:8080
 npm run dev
