@@ -1,11 +1,12 @@
-.border_all{
+.border_all {
 	position: absolute;
 	background-color: #fff;
 	width: 8px;
-    height: 8px;
-    border: 1px solid rgba(0,0,0,0.3);
-    display: none;
+	height: 8px;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	display: none;
 }
+
 .zoom_right {
 	cursor: e-resize;
 	top: calc(50% - 4px);
@@ -26,4 +27,21 @@
 	cursor: s-resize;
 	bottom: -4px;
 	left: calc(50% - 4px);
+}
+
+.zoom_rotate {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	bottom: -28px;
+	left: calc(50% - 10px);
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	border-radius: 50%;
+}
+
+.zoom_rotate .icon {
+	margin: 0 auto !important;
+	color: #8c8c8c;
 }

@@ -6,12 +6,12 @@
 	export default {
 		data() {
 			return {
-				litext: ['大标题', '标题', '副标题', '小标题', '正文内容']
+				litext: []
 			}
 		},
 		methods: {
-			editText(data){
-				console.log(data)
+			editPicture(){
+				var _self = this;
 			}
 		},
 		created() {

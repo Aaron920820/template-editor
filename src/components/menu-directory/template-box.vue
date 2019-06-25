@@ -5,7 +5,7 @@
 				<div class="ui three cards">
 					<div class="card" v-for="item in imgesCard">
 						<div class="image">
-							<img :src="item.img" @click="addPicture(item.img)">
+							<img :src="item.img" @click="addPicture(item.img,$event)">
 						</div>
 					</div>
 				</div>
@@ -29,8 +29,8 @@
 			upload() {
 				$('#zr_upload').click()
 			},
-			addPicture(imgUrl){
-				console.log(imgUrl)
+			addPicture(imgUrl,event){
+				this.$emit('addPicture',imgUrl,event.target.width,event.target.height)
 			}
 		},
 		created() {

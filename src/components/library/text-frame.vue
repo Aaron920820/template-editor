@@ -1,5 +1,5 @@
 <template>
-	<div class="dragtext" :style="psMsg.textStyle" @click="changeInner(psMsg)">
+	<div class="dragtext" :style="psMsg.textStyle" :class="psMsg.Class" @click="changeInner(psMsg)">
 		<div @blur="onBlur($event)" class="content" contenteditable="true" @input="changeText" v-cloak v-text="psMsg.defaultVal"></div>
 	</div>
 </template>

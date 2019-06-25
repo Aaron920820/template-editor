@@ -1,5 +1,6 @@
 <template>
 	<div class="homePage">
+		<!--头部-->
 		<div class="zr_header">
 			<div class="leftDiv">
 				<div class="s17"></div>
@@ -13,7 +14,9 @@
 				</button>
 			</div>
 		</div>
+		<!--整个页面DIV-->
 		<div id="zr_index" class="ui grid">
+			<!--左侧导航1-->
 			<div class="one wide column">
 				<div id="zr_menu" class="ui fluid tabular labeled icon vertical menu">
 					<a class="item" @click="menuToggle(list)" :class="{active:list.type == currentView}" v-for="(list,index) in menu">
@@ -21,19 +24,22 @@
 					</a>
 				</div>
 			</div>
+			<!--左侧导航2-->
 			<div id="sideBar" class="three wide stretched column">
 				<div id="myConcent" class="ui segment">
 					<keep-alive>
-						<box :is="currentView" @transfer='getbackground' @addText='addText'></box>
+						<box :is="currentView" @transfer='getbackground' @addText='addText' @addPicture='addPicture'></box>
 					</keep-alive>
 				</div>
 			</div>
+			<!--编辑面板-->
 			<div id="editorIndex" class="thirteen wide column">
 				<div id="editorPage" :style='backgroundCss'>
-					<text-frame v-for="(item,index) in textBox" :key="index" :psMsg="item" @setText="setText"></text-frame>
-					<picture-frame></picture-frame>
+					<text-frame v-for="(item,index) in textBox" :key="index+item.textId" :psMsg="item" @setText="setText"></text-frame>
+					<picture-frame v-for="(img,inx) in imgBox" :key="inx+img.imgId" :imgMsg="img" @setPicture="setPicture"></picture-frame>
 				</div>
 			</div>
+			<!--右侧操作栏-->
 			<div id="rightBar" class="three wide column">
 				<div style="background-color: rgb(62,84,115);text-align: center;color: white;">操作</div>
 				<operation :is="operationView" ref='edit'></operation>
@@ -89,8 +95,10 @@
 				currentView: 'background',
 				backgroundCss: '',
 				textBox: [],
+				imgBox: [],
 				textId: 0,
-				operationView:''
+				imgId: 0,
+				operationView: ''
 			}
 		},
 		methods: {
@@ -109,7 +117,7 @@
 				var item = {
 					"textId": "text" + _self.textId,
 					"textVal": te,
-					"defaultVal":te,
+					"defaultVal": te,
 					"Class": "",
 					"textStyle": {
 						"top": "50%",
@@ -127,11 +135,36 @@
 				}
 				_self.textBox.push(item);
 			},
-			setText(data,type){
+			addPicture(imgBase, width, height) {
+				var _self = this;
+				_self.imgId++;
+				var item = {
+					"imgId": "img" + _self.imgId,
+					"imgsrc": imgBase,
+					"Class": "",
+					"imgStyle": {
+						"top": "",
+						"left": "",
+						"width": width * 2 + 'px',
+						"height": height * 2 + 'px',
+						"z-index": "1",
+						"background-image": 'url(' + imgBase + ')'
+					}
+				}
+				_self.imgBox.push(item);
+			},
+			setText(data, type) {
 				var _self = this;
 				this.operationView = type;
-				Vue.nextTick(function(){
+				Vue.nextTick(function() {
 					_self.$refs.edit.editText(data);
+				})
+			},
+			setPicture(data, type) {
+				var _self = this;
+				this.operationView = type;
+				Vue.nextTick(function() {
+					_self.$refs.edit.editPicture(data);
 				})
 			}
 		},
@@ -142,6 +175,18 @@
 					window.event.returnValue = false;
 				}
 			}
+			document.oncontextmenu = function() {　　
+				return false;
+			}
+//			document.getElementById("editorPage").onmousedown = function(e) {　　
+//				if(e.button == 2) {　　　　
+//					alert("你点了右键");　　
+//				} else if(e.button == 0) {　　　　
+//					alert("你点了左键");　　
+//				} else if(e.button == 1) {　　　　
+//					alert("你点了滚轮");　　
+//				}
+//			}
 		},
 		components: {
 			templateBox,
@@ -150,7 +195,7 @@
 			textAttribute,
 			pictureAttribute,
 			'text-frame': textFrame,
-			'picture-frame':pictureFrame
+			'picture-frame': pictureFrame
 		}
 
 	}
@@ -227,7 +272,7 @@
 				border-radius: 0;
 				z-index: 3;
 				#myConcent {
-					background-color: rgb(63,70,82);
+					background-color: rgb(63, 70, 82);
 					border: none;
 					box-shadow: none;
 					border-radius: 0 !important;

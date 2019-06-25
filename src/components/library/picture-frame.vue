@@ -1,19 +1,20 @@
 <template>
-	<div class="dragpicture">
+	<div class="dragpicture" :Id='imgMsg.imgId' :class="imgMsg.Class" :style="imgMsg.imgStyle" @click="setImg()">
 		<div class="content"></div>
 	</div>
 </template>
 
 <script>
 	export default {
+		props:['imgMsg'],
 		data() {
 			return {
 				currentView: 'textBox'
 			}
 		},
 		methods: {
-			init() {
-
+			setImg(data) {
+				this.$emit('setPicture',data,'pictureAttribute')
 			}
 		},
 		created() {
@@ -31,7 +32,8 @@
 			    if(target.closest(".content").length != 0) return;
 			    $(".border_all").hide();
 			    $('.content').removeClass('onafter')
-			})
+			});
+//			$('.dragpicture').css('background-image','url('+_self.imgMsg.imgsrc+')')
 		},
 		components: {
 
