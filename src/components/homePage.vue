@@ -119,6 +119,7 @@
 					"textVal": te,
 					"defaultVal": te,
 					"Class": "",
+					"active":true,
 					"textStyle": {
 						"top": "50%",
 						"left": "45%",

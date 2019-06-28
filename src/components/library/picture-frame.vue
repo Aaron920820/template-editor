@@ -23,16 +23,21 @@
 		mounted() {
 			var _self = this;
 			$('.dragpicture').l_zoom('free').l_drag();
-			$(".content").click(function(){
-			  $(this).siblings('.border_all').show()
-			  $(this).addClass('onafter')
+			$(".border_all").hide();
+			$(".content").removeClass('onafter')
+			
+			$(".content").mousedown(function() {
+				$(".border_all").hide();
+				$(this).siblings('.border_all').show()
+				$(".content").removeClass('onafter')
+				$(this).addClass('onafter')
 			});
-			$(document).click(function(e){
-			    var target = $(e.target);
-			    if(target.closest(".content").length != 0) return;
-			    $(".border_all").hide();
-			    $('.content').removeClass('onafter')
-			});
+			$('#editorPage').click(function(e){
+				var target = $(e.target);
+				if(target.closest(".content").length != 0) return;
+				$(".border_all").hide();
+				$(".content").removeClass('onafter');
+			})
 //			$('.dragpicture').css('background-image','url('+_self.imgMsg.imgsrc+')')
 		},
 		components: {

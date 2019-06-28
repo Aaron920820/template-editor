@@ -1,5 +1,11 @@
 <template>
-	<div>图片操作</div>
+	<div>
+		<div class="ui secondary three item teal pointing menu" style="margin: 0;">
+			<a class="item active">图片</a>
+			<a class="item">动画</a>
+			<a class="item">层级</a>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -19,6 +25,10 @@
 		},
 		mounted() {
 			var _self = this;
+			$('.ui.menu .item').click(function(){
+				$(this).siblings().removeClass('active')
+				$(this).addClass('active')
+			})
 		},
 		components: {
 

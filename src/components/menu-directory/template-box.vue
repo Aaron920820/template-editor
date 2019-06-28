@@ -14,7 +14,7 @@
 		<div class="ui button primary" @click="upload()" style="position: fixed;width: 200px;margin-left:50px;bottom: 20px;">
 			<i class="ui icon cloud upload"></i> 上传图片
 		</div>
-		<input type="file" name="" accept="image/*" id="zr_upload" style="display: none;"/>
+		<input type="file" name="" accept="image/*" multiple id="zr_upload" style="display: none;" />
 	</div>
 </template>
 
@@ -29,8 +29,8 @@
 			upload() {
 				$('#zr_upload').click()
 			},
-			addPicture(imgUrl,event){
-				this.$emit('addPicture',imgUrl,event.target.width,event.target.height)
+			addPicture(imgUrl, event) {
+				this.$emit('addPicture', imgUrl, event.target.width, event.target.height)
 			}
 		},
 		created() {
@@ -40,20 +40,25 @@
 			var _self = this;
 			var eleFile = document.querySelector('#zr_upload');
 			eleFile.addEventListener('change', function() {
-				var file = this.files[0];
-				// 确认选择的文件是图片                
-				if(file.type.indexOf("image") == 0) {
-					var reader = new FileReader();
-					reader.readAsDataURL(file);
-					reader.onload = function(e) {
-						// 图片base64化
-						var newUrl = this.result;
-						var url = {
-							'img': newUrl
+				var file = this.files;
+				console.log(this.files)
+				// 确认选择的文件是图片   
+				for(var i = 0; i < file.length; i++) {
+					if(file[i].type.indexOf("image") == 0) {
+						var reader = new FileReader();
+						reader.readAsDataURL(file[i]);
+						reader.onload = function(e) {
+							// 图片base64化
+							var newUrl = this.result;
+							var url = {
+								'img': newUrl
+							};
+							_self.imgesCard.push(url)
 						};
-						_self.imgesCard.push(url)
-					};
+					}
 				}
+				console.log(_self.imgesCard)
+
 			});
 		},
 		components: {
