@@ -13,25 +13,25 @@
 						样式
 					</div>
 					<div class="item">
-						
+						加粗
 					</div>
 					<div class="item">
-						
+						斜体
 					</div>
 					<div class="item">
-						
+						下划线
 					</div>
 				</div>
 			</div>
-			<div class="title active"><i class="dropdown icon"></i> What kinds of dogs are there? </div>
+			<!--<div class="title active"><i class="dropdown icon"></i> What kinds of dogs are there? </div>
 			<div class="content active">
-				<!--<p class="transition visible" style="display: block !important;">狗有许多品种，每个品种都有不同的大小及性格，饲主通常选择适合自己生活方式的品种当作自已的伙伴，其中最受欢迎的品种绝对是吉娃娃。</p>-->
+				<p class="transition visible" style="display: block !important;">狗有许多品种，每个品种都有不同的大小及性格，饲主通常选择适合自己生活方式的品种当作自已的伙伴，其中最受欢迎的品种绝对是吉娃娃。</p>
 			</div>
 			<div class="title"><i class="dropdown icon"></i> How do you acquire a dog? </div>
 			<div class="content">
-				<!--<p class="transition hidden">通常有三种方式可以取得一只狗狗，宠物店、私人饲主或是动物之家。 (请以领养代替购买)</p>-->
+				<p class="transition hidden">通常有三种方式可以取得一只狗狗，宠物店、私人饲主或是动物之家。 (请以领养代替购买)</p>
 				<p class="transition hidden">你可以在动物之家内领养一只健康的小狗，比起在宠物店买，收容所中的宠物比较不容易有近亲交配出现的缺陷问题，而且领养一只小狗的费用远比你在宠物店中购买便宜得多。</p>
-			</div>
+			</div>-->
 		</div>
 	</div>
 
@@ -81,16 +81,17 @@
 					padding: 0 8px;
 					line-height: 38px;
 					border-bottom:1px solid #e1e1e1;
+					user-select:none;
 					.item{
 						width: 30px;
 						height: 32px;
 						display: inline-block;
 						vertical-align: middle;
+						line-height: 32px;
 					}
 					.item:nth-of-type(1){
 						width: auto;
 						font-size:12px;
-						line-height: 32px;
 						margin-right: 10px;
 					}
 					.item:hover:not(:first-child){

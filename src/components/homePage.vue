@@ -57,7 +57,7 @@
 				<div class="ui red basic cancel inverted button">
 					<i class="remove icon"></i> 否
 				</div>
-				<div class="ui green ok inverted button">
+				<div class="ui green ok inverted button" @click="saveData()">
 					<i class="checkmark icon"></i> 是
 				</div>
 			</div>
@@ -106,6 +106,7 @@
 				this.currentView = lis.type
 			},
 			saveTemplate() {
+				
 				$('#savemodal').modal('show')
 			},
 			getbackground(data) {
@@ -167,6 +168,9 @@
 				Vue.nextTick(function() {
 					_self.$refs.edit.editPicture(data);
 				})
+			},
+			saveData(){
+				console.log(this.textBox)
 			}
 		},
 		mounted() {
