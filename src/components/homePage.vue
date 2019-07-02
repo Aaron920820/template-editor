@@ -20,7 +20,7 @@
 			<div class="one wide column">
 				<div id="zr_menu" class="ui fluid tabular labeled icon vertical menu">
 					<a class="item" @click="menuToggle(list)" :class="{active:list.type == currentView}" v-for="(list,index) in menu">
-						<i class="ui icon" :class="list.iconClass"></i>{{list.name}}
+						<i class="icon" :class="list.iconClass"></i>{{list.name}}
 					</a>
 				</div>
 			</div>
@@ -57,7 +57,7 @@
 				<div class="ui red basic cancel inverted button">
 					<i class="remove icon"></i> 否
 				</div>
-				<div class="ui green ok inverted button">
+				<div class="ui green ok inverted button" @click="saveData()">
 					<i class="checkmark icon"></i> 是
 				</div>
 			</div>
@@ -106,9 +106,11 @@
 				this.currentView = lis.type
 			},
 			saveTemplate() {
+
 				$('#savemodal').modal('show')
 			},
 			getbackground(data) {
+				console.log(data)
 				this.backgroundCss = data
 			},
 			addText(data, te) {
@@ -118,8 +120,8 @@
 					"textId": "text" + _self.textId,
 					"textVal": te,
 					"defaultVal": te,
-					"Class": "",
-					"active":true,
+					"animateStyle": "",
+					"active": true,
 					"textStyle": {
 						"top": "50%",
 						"left": "45%",
@@ -142,7 +144,7 @@
 				var item = {
 					"imgId": "img" + _self.imgId,
 					"imgsrc": imgBase,
-					"Class": "",
+					"animateStyle": "",
 					"imgStyle": {
 						"top": "",
 						"left": "",
@@ -167,6 +169,29 @@
 				Vue.nextTick(function() {
 					_self.$refs.edit.editPicture(data);
 				})
+			},
+			saveData() {
+				console.log(this.textBox)
+				console.log(this.imgBox)
+				var _self = this;
+				var jsonData = {
+					"templateBackgroundImg": this.backgroundCss,
+					"textbox": this.textBox,
+					"imgbox": this.imgBox
+				};
+				$.ajax({
+					type: 'POST',
+					url: "http://192.168.0.133:20009/api/bind/createfile_js",
+					//					contentType: "application/json",
+					data: JSON.stringify(jsonData),
+					success: function(data) {
+						console.log(data)
+					},
+					error: function() {
+						console.log('请求失败')
+					},
+				});
+
 			}
 		},
 		mounted() {
@@ -179,15 +204,15 @@
 			document.oncontextmenu = function() {　　
 				return false;
 			}
-//			document.getElementById("editorPage").onmousedown = function(e) {　　
-//				if(e.button == 2) {　　　　
-//					alert("你点了右键");　　
-//				} else if(e.button == 0) {　　　　
-//					alert("你点了左键");　　
-//				} else if(e.button == 1) {　　　　
-//					alert("你点了滚轮");　　
-//				}
-//			}
+			//			document.getElementById("editorPage").onmousedown = function(e) {　　
+			//				if(e.button == 2) {　　　　
+			//					alert("你点了右键");　　
+			//				} else if(e.button == 0) {　　　　
+			//					alert("你点了左键");　　
+			//				} else if(e.button == 1) {　　　　
+			//					alert("你点了滚轮");　　
+			//				}
+			//			}
 		},
 		components: {
 			templateBox,
@@ -207,10 +232,14 @@
 		width: 100%;
 		height: 100%;
 		.zr_header {
-			background: -webkit-linear-gradient(left bottom, rgb(10, 185, 201), rgb(92, 96, 173));
-			background: -o-linear-gradient(left bottom, rgb(10, 185, 201), rgb(92, 96, 173));
-			background: -moz-linear-gradient(left bottom, rgb(10, 185, 201), rgb(92, 96, 173));
-			background: linear-gradient(left bottom, rgb(10, 185, 201), rgb(92, 96, 173));
+			background: -webkit-linear-gradient(left, rgb(10, 185, 201), rgb(92, 96, 173));
+			/* Safari 5.1 - 6.0 */
+			background: -o-linear-gradient(right, rgb(10, 185, 201), rgb(92, 96, 173));
+			/* Opera 11.1 - 12.0 */
+			background: -moz-linear-gradient(right, rgb(10, 185, 201), rgb(92, 96, 173));
+			/* Firefox 3.6 - 15 */
+			background: linear-gradient(to right, rgb(10, 185, 201), rgb(92, 96, 173));
+			/* 标准的语法（必须放在最后） */
 			width: 100%;
 			height: 38px;
 			z-index: 3;

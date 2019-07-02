@@ -238,6 +238,7 @@
 						border-radius: 0;
 						img {
 							border-radius: 0;
+							max-height: 150px;
 						}
 						.removeIcon{
 							position: absolute;

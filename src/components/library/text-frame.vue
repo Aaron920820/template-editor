@@ -1,5 +1,5 @@
 <template>
-	<div class="dragtext" :style="psMsg.textStyle" :class="psMsg.Class" @click="changeInner(psMsg)">
+	<div class="dragtext" :style="psMsg.textStyle" :class="psMsg.animateStyle" @click="changeInner(psMsg)">
 		<div class="content" contenteditable="true" @input="changeText" v-cloak v-text="psMsg.defaultVal"></div>
 	</div>
 </template>

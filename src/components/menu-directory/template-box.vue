@@ -93,6 +93,7 @@
 							border-radius: 0;
 							img {
 								border-radius: 0;
+								max-height: 150px;
 							}
 						}
 						.image:hover {

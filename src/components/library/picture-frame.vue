@@ -1,5 +1,5 @@
 <template>
-	<div class="dragpicture" :Id='imgMsg.imgId' :class="imgMsg.Class" :style="imgMsg.imgStyle" @click="setImg()">
+	<div class="dragpicture" :Id='imgMsg.imgId' :class="imgMsg.animateStyle" :style="imgMsg.imgStyle" @click="setImg()">
 		<div class="content"></div>
 	</div>
 </template>
