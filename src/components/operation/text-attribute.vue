@@ -6,20 +6,52 @@
 			<a class="item">图层</a>
 		</div>
 		<div class="ui fluid accordion">
-			<div class="title"><i class="dropdown icon"></i>文本设置</div>
+			<div class="title active"><i class="dropdown icon"></i>文本设置</div>
 			<div class="content">
+				<div class="formSytle">
+					<div class="item">
+						对齐
+					</div>
+					<div class="item" data-tooltip="左对齐" data-inverted="">
+						<icon name="left" :w="22" :h="22"></icon>
+					</div>
+					<div class="item" data-tooltip="居中对齐" data-inverted="">
+						<icon name="center" :w="22" :h="22"></icon>
+					</div>
+					<div class="item" data-tooltip="右对齐" data-inverted="">
+						<icon name="right" :w="22" :h="22"></icon>
+					</div>
+					<div class="item" data-tooltip="顶部对齐" data-inverted="">
+						<icon name="top" :w="22" :h="22"></icon>
+					</div>
+					<div class="item" data-tooltip="水平居中对齐" data-inverted="">
+						<icon name="czjz" :w="22" :h="22"></icon>
+					</div>
+					<div class="item" data-tooltip="底部对齐" data-inverted="">
+						<icon name="bottom" :w="22" :h="22"></icon>
+					</div>
+				</div>
 				<div class="formSytle">
 					<div class="item">
 						样式
 					</div>
-					<div class="item">
-						加粗
+					<div class="item" data-tooltip="加粗" data-inverted="">
+						<icon name="B-icon" :w="20" :h="20"></icon>
 					</div>
-					<div class="item">
-						斜体
+					<div class="item" data-tooltip="倾斜" data-inverted="">
+						<icon name="I-icon" :w="20" :h="20"></icon>
 					</div>
-					<div class="item">
-						下划线
+					<div class="item" data-tooltip="下划线" data-inverted="">
+						<icon name="U-icon" :w="20" :h="20"></icon>
+					</div>
+					<div class="item" data-tooltip="左对齐文本" data-inverted="">
+						<icon name="text-left" :w="22" :h="22"></icon>
+					</div>
+					<div class="item" data-tooltip="居中对齐文本" data-inverted="">
+						<icon name="text-center" :w="22" :h="22"></icon>
+					</div>
+					<div class="item" data-tooltip="右对齐文本" data-inverted="">
+						<icon name="text-right" :w="22" :h="22"></icon>
 					</div>
 				</div>
 			</div>
@@ -55,7 +87,7 @@
 		mounted() {
 			var _self = this;
 			$('.ui.menu .item').click(function() {
-				$(this).siblings().removeClass('active')
+				$(this).siblings('.item').removeClass('active')
 				$(this).addClass('active')
 			})
 			$('.ui.accordion').accordion();
@@ -79,27 +111,34 @@
 				padding: 0px 5px;
 				.formSytle{
 					padding: 0 8px;
-					line-height: 38px;
-					border-bottom:1px solid #e1e1e1;
+					height: 32px;
+					border-bottom:1px solid #e1e1e1 !important;
 					user-select:none;
 					.item{
 						width: 30px;
 						height: 32px;
 						display: inline-block;
 						vertical-align: middle;
-						line-height: 32px;
+						line-height: 2;
+						text-align: center;
+					}
+					.item:not(:first-child){
+						color: #7d8893;
 					}
 					.item:nth-of-type(1){
 						width: auto;
 						font-size:12px;
 						margin-right: 10px;
+						line-height: 32px;
 					}
 					.item:hover:not(:first-child){
 						background-color: rgb(236,236,236);
 					}
 				}
 				.formSytle:last-child{
-					border-bottom:none
+					border-bottom:none;
+					
+					
 				}
 			}
 		}

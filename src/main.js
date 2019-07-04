@@ -11,6 +11,8 @@ import '../static/css/l_zoom.css'
 import '../static/css/animate.min.css'
 import '../static/js/l_zoom.min.js'
 import '../static/js/l_drag.min.js'
+import Icon from 'vue2-svg-icon/Icon.vue'
+Vue.component('icon', Icon)
 
 Vue.config.productionTip = false
 

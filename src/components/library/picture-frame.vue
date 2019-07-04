@@ -34,6 +34,7 @@
 			});
 			$('#editorPage').click(function(e){
 				var target = $(e.target);
+				console.log(target.closest(".content").length)
 				if(target.closest(".content").length != 0) return;
 				$(".border_all").hide();
 				$(".content").removeClass('onafter');
