@@ -8,14 +8,14 @@
 		<div class="ui fluid accordion">
 			<div class="title active"><i class="dropdown icon"></i>文本设置</div>
 			<div class="content">
-				<div class="formSytle">
+				<div class="formSytle" id="alignBox">
 					<div class="item">
 						对齐
 					</div>
-					<div class="item" data-tooltip="左对齐" data-inverted="">
-						<icon name="left" :w="22" :h="22"></icon>
+					<div @click="setAlign(index)" v-for="(list,index) in align" class="item" :data-tooltip="list.tooltip" data-inverted="">
+						<icon :name="list.name" :w="list.size" :h="list.size"></icon>
 					</div>
-					<div class="item" data-tooltip="居中对齐" data-inverted="">
+					<!--<div class="item" data-tooltip="居中对齐" data-inverted="">
 						<icon name="center" :w="22" :h="22"></icon>
 					</div>
 					<div class="item" data-tooltip="右对齐" data-inverted="">
@@ -29,7 +29,7 @@
 					</div>
 					<div class="item" data-tooltip="底部对齐" data-inverted="">
 						<icon name="bottom" :w="22" :h="22"></icon>
-					</div>
+					</div>-->
 				</div>
 				<div class="formSytle">
 					<div class="item">
@@ -73,12 +73,62 @@
 	export default {
 		data() {
 			return {
-				text: ''
+				receivedData: '',
+				Tindex: '',
+				align: [{
+					tooltip: "左对齐",
+					name: "left",
+					size: "22"
+				}, {
+					tooltip: "居中对齐",
+					name: "center",
+					size: "22"
+				}, {
+					tooltip: "右对齐",
+					name: "right",
+					size: "22"
+				}, {
+					tooltip: "顶部对齐",
+					name: "top",
+					size: "22"
+				}, {
+					tooltip: "水平居中对齐",
+					name: "czjz",
+					size: "22"
+				}, {
+					tooltip: "底部对齐",
+					name: "bottom",
+					size: "22"
+				}]
 			}
 		},
 		methods: {
-			editText(data) {
-				this.text = data.textVal
+			editText(data, index) {
+				this.receivedData = data;
+				this.Tindex = index;
+			},
+			setAlign(inx) {
+				var _self = this;
+				var index = _self.Tindex
+				if(inx == 0) {
+					this.receivedData.textStyle.left = '0px'
+					document.getElementsByClassName('dragtext')[index].style.left = this.receivedData.textStyle.left
+				} else if(inx == 1) {
+					var height = document.getElementsByClassName('dragtext')[index].offsetHeight;
+					this.receivedData.textStyle.top = 'calc(50% - ' + height/2 + 'px)';
+					document.getElementsByClassName('dragtext')[index].style.top = this.receivedData.textStyle.top
+				}else if(inx == 2){
+//					this.receivedData.textStyle['right'] = '0px'
+//					document.getElementsByClassName('dragtext')[index].style.right = this.receivedData.textStyle.right
+//					console.log(this.receivedData.textStyle)
+					var width = document.getElementsByClassName('dragtext')[index].style.width
+					this.receivedData.textStyle.left = 'calc(100% - ' + width + ')';
+					document.getElementsByClassName('dragtext')[index].style.left = this.receivedData.textStyle.left
+				}else if(inx == 3){
+					this.receivedData.textStyle.top = '0px'
+					document.getElementsByClassName('dragtext')[index].style.top = this.receivedData.textStyle.top
+				}
+				this.$emit('setStyle', _self.receivedData, this.Tindex)
 			}
 		},
 		created() {
@@ -91,6 +141,18 @@
 				$(this).addClass('active')
 			})
 			$('.ui.accordion').accordion();
+			$('#alignBox .item').not(":first").mousedown(function() {
+				$(this).css({
+					'background': '#00c4cd',
+					'color': 'rgb(255,255,255)'
+				})
+				$(this).mouseup(function() {
+					$(this).css({
+						'background': '',
+						'color': '#7d8893'
+					})
+				})
+			})
 		},
 		components: {
 
@@ -100,21 +162,21 @@
 </script>
 
 <style scoped lang="scss">
-	#textSetPanel{
-		.ui.accordion{
-			.title{
-				background-color: rgb(252,252,252);
+	#textSetPanel {
+		.ui.accordion {
+			.title {
+				background-color: rgb(252, 252, 252);
 				border-top: 1px solid #e1e1e1;
 			}
-			.content{
+			.content {
 				border-top: 1px solid #e1e1e1;
 				padding: 0px 5px;
-				.formSytle{
+				.formSytle {
 					padding: 0 8px;
 					height: 32px;
-					border-bottom:1px solid #e1e1e1 !important;
-					user-select:none;
-					.item{
+					border-bottom: 1px solid #e1e1e1 !important;
+					user-select: none;
+					.item {
 						width: 30px;
 						height: 32px;
 						display: inline-block;
@@ -122,23 +184,21 @@
 						line-height: 2;
 						text-align: center;
 					}
-					.item:not(:first-child){
+					.item:not(:first-child) {
 						color: #7d8893;
 					}
-					.item:nth-of-type(1){
+					.item:nth-of-type(1) {
 						width: auto;
-						font-size:12px;
+						font-size: 12px;
 						margin-right: 10px;
 						line-height: 32px;
 					}
-					.item:hover:not(:first-child){
-						background-color: rgb(236,236,236);
+					.item:hover:not(:first-child) {
+						background-color: rgb(236, 236, 236);
 					}
 				}
-				.formSytle:last-child{
-					border-bottom:none;
-					
-					
+				.formSytle:last-child {
+					border-bottom: none;
 				}
 			}
 		}

@@ -35,14 +35,14 @@
 			<!--编辑面板-->
 			<div id="editorIndex" class="thirteen wide column">
 				<div id="editorPage" :style='backgroundCss'>
-					<text-frame v-for="(item,index) in textBox" :key="index+item.textId" :psMsg="item" @setText="setText"></text-frame>
+					<text-frame v-for="(item,index) in textBox" :key="index+item.textId" :psMsg="item" :textIndex="index" @setText="setText"></text-frame>
 					<picture-frame v-for="(img,inx) in imgBox" :key="inx+img.imgId" :imgMsg="img" @setPicture="setPicture"></picture-frame>
 				</div>
 			</div>
 			<!--右侧操作栏-->
 			<div id="rightBar" class="three wide column">
 				<div style="background-color: rgb(62,84,115);text-align: center;color: white;">操作</div>
-				<operation :is="operationView" ref='edit'></operation>
+				<operation :is="operationView" ref='edit' @setStyle="setStyle"></operation>
 			</div>
 		</div>
 		<!--弹出框-->
@@ -156,11 +156,11 @@
 				}
 				_self.imgBox.push(item);
 			},
-			setText(data, type) {
+			setText(data, type,index) {
 				var _self = this;
 				this.operationView = type;
 				Vue.nextTick(function() {
-					_self.$refs.edit.editText(data);
+					_self.$refs.edit.editText(data,index);
 				})
 			},
 			setPicture(data, type) {
@@ -169,6 +169,12 @@
 				Vue.nextTick(function() {
 					_self.$refs.edit.editPicture(data);
 				})
+			},
+			setStyle(data,index){
+				var _self = this;
+				var dataS = JSON.parse(JSON.stringify(data))
+				Vue.set(_self.textBox,index,dataS)
+				
 			},
 			saveData() {
 				console.log(this.textBox)
@@ -204,6 +210,12 @@
 			document.oncontextmenu = function() {　　
 				return false;
 			}
+			$('#editorPage').click(function(e){
+				var target = $(e.target);
+				if(target.closest(".zrcontent").length != 0) return;
+				$(".border_all").hide();
+				$(".zrcontent").removeClass('onafter');
+			})
 			//			document.getElementById("editorPage").onmousedown = function(e) {　　
 			//				if(e.button == 2) {　　　　
 			//					alert("你点了右键");　　

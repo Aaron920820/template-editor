@@ -1,6 +1,6 @@
 <template>
 	<div class="dragpicture" :Id='imgMsg.imgId' :class="imgMsg.animateStyle" :style="imgMsg.imgStyle" @click="setImg()">
-		<div class="content"></div>
+		<div class="zrcontent"></div>
 	</div>
 </template>
 
@@ -24,22 +24,13 @@
 			var _self = this;
 			$('.dragpicture').l_zoom('free').l_drag();
 			$(".border_all").hide();
-			$(".content").removeClass('onafter')
-			
-			$(".content").mousedown(function() {
+			$(".zrcontent").removeClass('onafter')
+			$(".zrcontent").mousedown(function() {
 				$(".border_all").hide();
 				$(this).siblings('.border_all').show()
-				$(".content").removeClass('onafter')
+				$(".zrcontent").removeClass('onafter')
 				$(this).addClass('onafter')
 			});
-			$('#editorPage').click(function(e){
-				var target = $(e.target);
-				console.log(target.closest(".content").length)
-				if(target.closest(".content").length != 0) return;
-				$(".border_all").hide();
-				$(".content").removeClass('onafter');
-			})
-//			$('.dragpicture').css('background-image','url('+_self.imgMsg.imgsrc+')')
 		},
 		components: {
 
@@ -58,13 +49,13 @@
 		background-image: url(../../../static/backgroundImages/img.jpg);
 		background-size: 100% 100%;
 		background-repeat: no-repeat;
-		.content {
+		.zrcontent {
 			width: 100%;
 			height: 100%;
 			border: 1px solid rgba(255,255,255,0);
 			overflow:hidden;
 		}
-		.content:focus{
+		.zrcontent:focus{
 			outline: none;
 			border: none;
 		}

@@ -1,12 +1,12 @@
 <template>
 	<div class="dragtext" :style="psMsg.textStyle" :class="psMsg.animateStyle" @click="changeInner(psMsg)">
-		<div class="content" contenteditable="true" @input="changeText" v-cloak v-text="psMsg.defaultVal"></div>
+		<div class="zrcontent" contenteditable="true" @input="changeText" v-cloak v-text="psMsg.defaultVal"></div>
 	</div>
 </template>
 
 <script>
 	export default {
-		props: ['psMsg'],
+		props: ['psMsg','textIndex'],
 		data() {
 			return {
 				currentView: 'textBox'
@@ -19,7 +19,7 @@
 			changeInner(event) {
 				var _self = this;
 				_self.psMsg.active = true;
-				this.$emit('setText', event, 'textAttribute')
+				this.$emit('setText', event, 'textAttribute',_self.textIndex)
 			},
 			changeText($event) {
 				this.psMsg['textVal'] = $event.target.innerText
@@ -32,20 +32,14 @@
 			var _self = this;
 			$('.dragtext').l_zoom('free').l_drag();
 			$(".border_all").hide();
-			$(".content").removeClass('onafter')
+			$(".zrcontent").removeClass('onafter')
 			
-			$(".content").mousedown(function() {
+			$(".zrcontent").mousedown(function() {
 				$(".border_all").hide();
 				$(this).siblings('.border_all').show()
-				$(".content").removeClass('onafter')
+				$(".zrcontent").removeClass('onafter')
 				$(this).addClass('onafter')
 			});
-			$('#editorPage').click(function(e){
-				var target = $(e.target);
-				if(target.closest(".content").length != 0) return;
-				$(".border_all").hide();
-				$(".content").removeClass('onafter');
-			})
 		},
 		components: {
 
@@ -62,13 +56,13 @@
 		border: 1px solid rgba(255, 255, 255, 0);
 		height: auto;
 		word-break: break-all;
-		.content {
+		.zrcontent {
 			height: 100%;
 			border: 1px solid rgba(255, 255, 255, 0);
 			overflow: hidden;
 			text-overflow: ellipsis;
 		}
-		.content:focus {
+		.zrcontent:focus {
 			outline: none;
 			border: none;
 		}
