@@ -42,7 +42,7 @@
 			<!--右侧操作栏-->
 			<div id="rightBar" class="three wide column">
 				<div style="background-color: rgb(62,84,115);text-align: center;color: white;">操作</div>
-				<operation :is="operationView" ref='edit' @setStyle="setStyle"></operation>
+				<operation :is="operationView" :boxShow='boxShow' ref='edit' @setStyle="setStyle"></operation>
 			</div>
 		</div>
 		<!--弹出框-->
@@ -98,6 +98,7 @@
 				imgBox: [],
 				textId: 0,
 				imgId: 0,
+				boxShow:false,
 				operationView: ''
 			}
 		},
@@ -137,6 +138,7 @@
 					}
 				}
 				_self.textBox.push(item);
+				_self.operationView = ''
 			},
 			addPicture(imgBase, width, height) {
 				var _self = this;
@@ -215,16 +217,8 @@
 				if(target.closest(".zrcontent").length != 0) return;
 				$(".border_all").hide();
 				$(".zrcontent").removeClass('onafter');
+				_self.operationView = ''
 			})
-			//			document.getElementById("editorPage").onmousedown = function(e) {　　
-			//				if(e.button == 2) {　　　　
-			//					alert("你点了右键");　　
-			//				} else if(e.button == 0) {　　　　
-			//					alert("你点了左键");　　
-			//				} else if(e.button == 1) {　　　　
-			//					alert("你点了滚轮");　　
-			//				}
-			//			}
 		},
 		components: {
 			templateBox,

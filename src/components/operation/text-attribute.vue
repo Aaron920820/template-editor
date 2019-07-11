@@ -7,29 +7,25 @@
 		</div>
 		<div class="ui fluid accordion">
 			<div class="title active"><i class="dropdown icon"></i>文本设置</div>
-			<div class="content">
-				<div class="formSytle" id="alignBox">
+			<div class="content active">
+				<div class="formSytle zrBox" id="alignBox">
 					<div class="item">
 						对齐
 					</div>
 					<div @click="setAlign(index)" v-for="(list,index) in align" class="item" :data-tooltip="list.tooltip" data-inverted="">
 						<icon :name="list.name" :w="list.size" :h="list.size"></icon>
 					</div>
-					<!--<div class="item" data-tooltip="居中对齐" data-inverted="">
-						<icon name="center" :w="22" :h="22"></icon>
+				</div>
+				<div class="formSytle zrBox" id="levelBox">
+					<div class="item">
+						图层
 					</div>
-					<div class="item" data-tooltip="右对齐" data-inverted="">
-						<icon name="right" :w="22" :h="22"></icon>
+					<div v-for="(list,index) in level" class="item" :data-tooltip="list.tooltip" data-inverted="">
+						<!--<icon :name="list.name" :w="list.size" :h="list.size"></icon>-->
+						<div class="imgBox" style="background-image: url('http://res.maka.im/cdn/makal/release/66d2cb33e5299d433fe27e69a6cdb6fb.png');background-size: 100% 100%;">
+							
+						</div>
 					</div>
-					<div class="item" data-tooltip="顶部对齐" data-inverted="">
-						<icon name="top" :w="22" :h="22"></icon>
-					</div>
-					<div class="item" data-tooltip="水平居中对齐" data-inverted="">
-						<icon name="czjz" :w="22" :h="22"></icon>
-					</div>
-					<div class="item" data-tooltip="底部对齐" data-inverted="">
-						<icon name="bottom" :w="22" :h="22"></icon>
-					</div>-->
 				</div>
 				<div class="formSytle">
 					<div class="item">
@@ -71,6 +67,7 @@
 
 <script>
 	export default {
+		props:['boxShow'],
 		data() {
 			return {
 				receivedData: '',
@@ -99,6 +96,23 @@
 					tooltip: "底部对齐",
 					name: "bottom",
 					size: "22"
+				}],
+				level: [{
+					tooltip: "上一层",
+					name: "cbpag-wbbtu",
+					size: "22"
+				}, {
+					tooltip: "下一层",
+					name: "downlevel",
+					size: "22"
+				}, {
+					tooltip: "置顶",
+					name: "toplevel",
+					size: "22"
+				}, {
+					tooltip: "置底",
+					name: "bottomlevel",
+					size: "22"
 				}]
 			}
 		},
@@ -121,8 +135,9 @@
 //					this.receivedData.textStyle['right'] = '0px'
 //					document.getElementsByClassName('dragtext')[index].style.right = this.receivedData.textStyle.right
 //					console.log(this.receivedData.textStyle)
-					var width = document.getElementsByClassName('dragtext')[index].style.width
-					this.receivedData.textStyle.left = 'calc(100% - ' + width + ')';
+					var width = document.getElementsByClassName('dragtext')[index].offsetWidth
+					console.log(width)
+					this.receivedData.textStyle.left = 'calc(100% - ' + width + 'px)';
 					document.getElementsByClassName('dragtext')[index].style.left = this.receivedData.textStyle.left
 				}else if(inx == 3){
 					this.receivedData.textStyle.top = '0px'
@@ -141,7 +156,7 @@
 				$(this).addClass('active')
 			})
 			$('.ui.accordion').accordion();
-			$('#alignBox .item').not(":first").mousedown(function() {
+			$('.zrBox .item').not(":first").mousedown(function() {
 				$(this).css({
 					'background': '#00c4cd',
 					'color': 'rgb(255,255,255)'

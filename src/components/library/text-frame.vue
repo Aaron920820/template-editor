@@ -13,9 +13,6 @@
 			}
 		},
 		methods: {
-			init() {
-
-			},
 			changeInner(event) {
 				var _self = this;
 				_self.psMsg.active = true;
@@ -67,7 +64,7 @@
 			border: none;
 		}
 		.onafter {
-			border: 1px solid rgba(0, 0, 0, 0.3) !important
+			border: 1px dashed rgba(0, 0, 0, 0.3) !important;
 		}
 	}
 </style>
