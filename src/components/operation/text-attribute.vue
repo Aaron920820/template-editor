@@ -75,22 +75,13 @@
 					</div>
 				</div>
 			</div>
-			<!--<div class="title active"><i class="dropdown icon"></i> What kinds of dogs are there? </div>
-			<div class="content active">
-				<p class="transition visible" style="display: block !important;">狗有许多品种，每个品种都有不同的大小及性格，饲主通常选择适合自己生活方式的品种当作自已的伙伴，其中最受欢迎的品种绝对是吉娃娃。</p>
-			</div>
-			<div class="title"><i class="dropdown icon"></i> How do you acquire a dog? </div>
-			<div class="content">
-				<p class="transition hidden">通常有三种方式可以取得一只狗狗，宠物店、私人饲主或是动物之家。 (请以领养代替购买)</p>
-				<p class="transition hidden">你可以在动物之家内领养一只健康的小狗，比起在宠物店买，收容所中的宠物比较不容易有近亲交配出现的缺陷问题，而且领养一只小狗的费用远比你在宠物店中购买便宜得多。</p>
-			</div>-->
 		</div>
 		<div id="animateSet" class="ui fluid accordion" v-show="setType == 'animateSet'">
 			<div class="title active"><i class="dropdown icon"></i>动画设置</div>
 			<div class="content active">
 				<div class="animatino-list">
 					<div class="animation-item" v-for="item in animateList">
-						<div class="animation-icon" @click="setAnimate(item.className)" :style="item.bpStyle"></div>
+						<div class="animation-icon" :class="{'animation-icon-click':item.className == receivedData.animateStyle}" @click="setAnimate(item.className)" :style="item.bpStyle"></div>
 						<div class="animation-name">{{item.text}}</div>
 					</div>
 				</div>
@@ -341,10 +332,10 @@
 					_self.receivedData.textStyle['font-size'] = value
 				}
 			})
-			$('.animation-icon').click(function() {
-				$('.animation-icon').removeClass('animation-icon-click')
-				$(this).addClass('animation-icon-click')
-			})
+//			$('.animation-icon').click(function() {
+//				$('.animation-icon').removeClass('animation-icon-click')
+//				$(this).addClass('animation-icon-click')
+//			})
 
 		},
 		components: {
