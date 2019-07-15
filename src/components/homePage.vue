@@ -36,13 +36,13 @@
 			<div id="editorIndex" class="thirteen wide column">
 				<div id="editorPage" :style='backgroundCss'>
 					<text-frame v-for="(item,index) in textBox" :key="index+item.textId" :psMsg="item" :textIndex="index" @setText="setText"></text-frame>
-					<picture-frame v-for="(img,inx) in imgBox" :key="inx+img.imgId" :imgMsg="img" @setPicture="setPicture"></picture-frame>
+					<picture-frame v-for="(img,inx) in imgBox" :key="inx+img.imgId" :imgMsg="img" :PictureIndex="inx" @setPicture="setPicture"></picture-frame>
 				</div>
 			</div>
 			<!--右侧操作栏-->
 			<div id="rightBar" class="three wide column">
 				<div style="background-color: rgb(62,84,115);text-align: center;color: white;">操作</div>
-				<operation :is="operationView" :boxShow='boxShow' ref='edit' @setStyle="setStyle"></operation>
+				<operation :is="operationView" ref='edit'></operation>
 			</div>
 		</div>
 		<!--弹出框-->
@@ -111,7 +111,6 @@
 				$('#savemodal').modal('show')
 			},
 			getbackground(data) {
-				console.log(data)
 				this.backgroundCss = data
 			},
 			addText(data, te) {
@@ -127,7 +126,7 @@
 						"top": "50%",
 						"left": "45%",
 						"z-index": "1",
-						"color": "",
+						"color": "#000000",
 						"font-size": data,
 						"text-align": "",
 						"writing-mode": "",
@@ -165,19 +164,19 @@
 					_self.$refs.edit.editText(data,index);
 				})
 			},
-			setPicture(data, type) {
+			setPicture(data, type,index) {
 				var _self = this;
 				this.operationView = type;
 				Vue.nextTick(function() {
-					_self.$refs.edit.editPicture(data);
+					_self.$refs.edit.editPicture(data,index);
 				})
 			},
-			setStyle(data,index){
-				var _self = this;
-				var dataS = JSON.parse(JSON.stringify(data))
-				Vue.set(_self.textBox,index,dataS)
-				
-			},
+//			setStyle(data,index,type){
+//				var _self = this;
+//				var dataS = JSON.parse(JSON.stringify(data))
+//				Vue.set(_self.textBox,index,dataS)
+//				
+//			},
 			saveData() {
 				console.log(this.textBox)
 				console.log(this.imgBox)

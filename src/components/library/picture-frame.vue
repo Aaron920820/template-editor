@@ -1,12 +1,12 @@
 <template>
-	<div class="dragpicture" :Id='imgMsg.imgId' :class="imgMsg.animateStyle" :style="imgMsg.imgStyle" @click="setImg()">
+	<div class="dragpicture" :Id='imgMsg.imgId' :class="imgMsg.animateStyle" :style="imgMsg.imgStyle" @click="setImg(imgMsg)">
 		<div class="zrcontent"></div>
 	</div>
 </template>
 
 <script>
 	export default {
-		props:['imgMsg'],
+		props:['imgMsg','PictureIndex'],
 		data() {
 			return {
 				currentView: 'textBox'
@@ -14,7 +14,8 @@
 		},
 		methods: {
 			setImg(data) {
-				this.$emit('setPicture',data,'pictureAttribute')
+				var _self = this;
+				this.$emit('setPicture',data,'pictureAttribute',_self.PictureIndex)
 			}
 		},
 		created() {
