@@ -6,17 +6,21 @@
 
 <script>
 	export default {
-		props: ['psMsg','textIndex'],
+		props: ['psMsg', 'textIndex'],
 		data() {
 			return {
-				currentView: 'textBox'
+				currentView: 'textBox',
+				observer: null,
+				recordOldValue: { // 记录下旧的宽高数据，避免重复触发回调函数
+					width: '0',
+					height: '0'
+				}
 			}
 		},
 		methods: {
 			changeInner(event) {
 				var _self = this;
-				_self.psMsg.active = true;
-				this.$emit('setText', event, 'textAttribute',_self.textIndex)
+				this.$emit('setText', event, 'textAttribute', _self.textIndex)
 			},
 			changeText($event) {
 				this.psMsg['textVal'] = $event.target.innerText
@@ -30,16 +34,37 @@
 			$('.dragtext').l_zoom('free').l_drag();
 			$(".border_all").hide();
 			$(".zrcontent").removeClass('onafter')
-			
+
 			$(".zrcontent").mousedown(function() {
 				$(".border_all").hide();
 				$(this).siblings('.border_all').show()
 				$(".zrcontent").removeClass('onafter')
 				$(this).addClass('onafter')
 			});
+			let MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+			let element = document.getElementsByClassName('dragtext')[_self.textIndex]
+			this.observer = new MutationObserver((mutationList) => {
+				for(let mutation of mutationList) {
+//					console.log(mutation)
+					_self.psMsg.textStyle.top = mutation.target.style.top;
+					_self.psMsg.textStyle.left = mutation.target.style.left
+				}
+			});
+			this.observer.observe(element, {
+				attributes: true,
+				attributeFilter: ['style'],
+				attributeOldValue: true
+			})
 		},
 		components: {
 
+		},
+		beforeDestroyed() {
+			if(this.observer) {
+				this.observer.disconnect()
+				this.observer.takeRecords()
+				this.observer = null
+			}
 		}
 
 	}

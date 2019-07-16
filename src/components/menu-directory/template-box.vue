@@ -41,7 +41,7 @@
 			var eleFile = document.querySelector('#zr_upload');
 			eleFile.addEventListener('change', function() {
 				var file = this.files;
-				console.log(this.files)
+//				console.log(this.files)
 				// 确认选择的文件是图片   
 				for(var i = 0; i < file.length; i++) {
 					if(file[i].type.indexOf("image") == 0) {
@@ -57,7 +57,7 @@
 						};
 					}
 				}
-				console.log(_self.imgesCard)
+//				console.log(_self.imgesCard)
 
 			});
 		},

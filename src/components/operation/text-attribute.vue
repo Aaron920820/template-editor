@@ -1,9 +1,9 @@
 <template>
 	<div id="textSetPanel">
-		<div class="ui secondary three item teal pointing menu" style="margin: 0;">
+		<div class="ui secondary two item teal pointing menu" style="margin: 0;">
 			<a class="item active" @click="togglePage('textSet')">文本</a>
 			<a class="item" @click="togglePage('animateSet')">动画</a>
-			<a class="item" @click="togglePage('levelSet')">图层</a>
+			<!--<a class="item" @click="togglePage('levelSet')">图层</a>-->
 		</div>
 		<div id="textSet" class="ui fluid accordion" v-show="setType == 'textSet'">
 			<div class="title active"><i class="dropdown icon"></i>文本设置</div>
@@ -20,7 +20,7 @@
 					<div class="item">
 						图层
 					</div>
-					<div v-for="(list,index) in level" class="item" :data-tooltip="list.tooltip" data-inverted="">
+					<div v-for="(list,index) in level" @click="setLevel(index)" class="item" :data-tooltip="list.tooltip" data-inverted="">
 						<!--<icon :name="list.name" :w="list.size" :h="list.size"></icon>-->
 						<img class="imgBox" :src="list.url"></img>
 					</div>
@@ -60,7 +60,7 @@
 					</div>
 					<div style="font-size: 12px;">
 						大小
-						<div class="ui selection dropdown" id="fontSizeDrop" style="min-width: 30px;width: 80px;">
+						<div class="ui selection dropdown" id="fontSizeDrop" style="min-width: 30px;width: 80px;margin-left: 14px;">
 							<input type="hidden" name="gender" v-model="fontSizeVal">
 							<i class="dropdown icon" style="line-height: 0.8;"></i>
 							<div class="default text">大小</div>
@@ -141,95 +141,95 @@
 				}],
 				fontsizeList: ['12px', '13px', '14px', '16px', '18px', '20px', '22px', '26px', '28px', '32px', '36px', '48px'],
 				animateList: [{
-					text: '淡入',
-					className: 'fadeIn animated',
-					bpStyle: 'background-position: -60px 0px'
-				}, {
-					text: '从左滚入',
-					className: 'rotateInDownLeft animated',
-					bpStyle: 'background-position: -120px 0px'
-				}, {
-					text: '从右滚入',
-					className: 'rotateInDownRight animated',
-					bpStyle: 'background-position: -180px 0px'
-				}, {
-					text: '放大',
-					className: 'zoomIn animated',
-					bpStyle: 'background-position: 0px -60px'
-				}, {
-					text: '下落放大',
-					className: 'zoomInDown animated',
-					bpStyle: 'background-position: -60px -60px'
-				}, {
-					text: '弹性放大',
-					className: 'bounceIn animated',
-					bpStyle: 'background-position: -120px -60px'
-				},  {
-					text: '向右飞入',
-					className: 'fadeInLeftBig animated',
-					bpStyle: 'background-position: 0px -120px'
-				}, {
-					text: '向左飞入',
-					className: 'fadeInRightBig animated',
-					bpStyle: 'background-position: -60px -120px'
-				}, {
-					text: '向上飞入',
-					className: 'fadeInUpBig animated',
-					bpStyle: 'background-position: -120px -120px'
-				}, {
-					text: '向下飞入',
-					className: 'fadeInDownBig animated',
-					bpStyle: 'background-position: -180px -120px'
-				}, {
-					text: '旋转出现',
-					className: 'rotateIn animated',
-					bpStyle: 'background-position: 0px -180px'
-				}, {
-					text: '左右翻转',
-					className: 'flipInY animated',
-					bpStyle: 'background-position: -60px -180px'
-				}, {
-					text: '上下翻转',
-					className: 'flipInX animated',
-					bpStyle: 'background-position: -120px -180px'
-				}, {
-					text: '刹车',
-					className: 'lightSpeedIn animated',
-					bpStyle: 'background-position: -180px -180px'
-				}, {
-					text: '向右滑入',
-					className: 'bounceInLeft animated',
-					bpStyle: 'background-position: 0px -240px'
-				}, {
-					text: '向左滑入',
-					className: 'bounceInRight animated',
-					bpStyle: 'background-position: -60px -240px'
-				}, {
-					text: '向上滑入',
-					className: 'bounceInUp animated',
-					bpStyle: 'background-position: -120px -240px'
-				}, {
-					text: '向下滑入',
-					className: 'bounceInDown animated',
-					bpStyle: 'background-position: -180px -240px'
-				}
-//				,{
-//					text: '向右展开',
-//					className: 'spread animated',
-//					bpStyle: 'background-position: 0px -300px'
-//				}, {
-//					text: '向左展开',
-//					className: 'flash animated',
-//					bpStyle: 'background-position: -60px -300px'
-//				}, {
-//					text: '向上展开',
-//					className: 'flash animated',
-//					bpStyle: 'background-position: -120px -300px'
-//				}, {
-//					text: '向下展开',
-//					className: 'flash animated',
-//					bpStyle: 'background-position: -180px -300px'
-//				}
+						text: '淡入',
+						className: 'fadeIn animated',
+						bpStyle: 'background-position: -60px 0px'
+					}, {
+						text: '从左滚入',
+						className: 'rotateInDownLeft animated',
+						bpStyle: 'background-position: -120px 0px'
+					}, {
+						text: '从右滚入',
+						className: 'rotateInDownRight animated',
+						bpStyle: 'background-position: -180px 0px'
+					}, {
+						text: '放大',
+						className: 'zoomIn animated',
+						bpStyle: 'background-position: 0px -60px'
+					}, {
+						text: '下落放大',
+						className: 'zoomInDown animated',
+						bpStyle: 'background-position: -60px -60px'
+					}, {
+						text: '弹性放大',
+						className: 'bounceIn animated',
+						bpStyle: 'background-position: -120px -60px'
+					}, {
+						text: '向右飞入',
+						className: 'fadeInLeftBig animated',
+						bpStyle: 'background-position: 0px -120px'
+					}, {
+						text: '向左飞入',
+						className: 'fadeInRightBig animated',
+						bpStyle: 'background-position: -60px -120px'
+					}, {
+						text: '向上飞入',
+						className: 'fadeInUpBig animated',
+						bpStyle: 'background-position: -120px -120px'
+					}, {
+						text: '向下飞入',
+						className: 'fadeInDownBig animated',
+						bpStyle: 'background-position: -180px -120px'
+					}, {
+						text: '旋转出现',
+						className: 'rotateIn animated',
+						bpStyle: 'background-position: 0px -180px'
+					}, {
+						text: '左右翻转',
+						className: 'flipInY animated',
+						bpStyle: 'background-position: -60px -180px'
+					}, {
+						text: '上下翻转',
+						className: 'flipInX animated',
+						bpStyle: 'background-position: -120px -180px'
+					}, {
+						text: '刹车',
+						className: 'lightSpeedIn animated',
+						bpStyle: 'background-position: -180px -180px'
+					}, {
+						text: '向右滑入',
+						className: 'bounceInLeft animated',
+						bpStyle: 'background-position: 0px -240px'
+					}, {
+						text: '向左滑入',
+						className: 'bounceInRight animated',
+						bpStyle: 'background-position: -60px -240px'
+					}, {
+						text: '向上滑入',
+						className: 'bounceInUp animated',
+						bpStyle: 'background-position: -120px -240px'
+					}, {
+						text: '向下滑入',
+						className: 'bounceInDown animated',
+						bpStyle: 'background-position: -180px -240px'
+					}
+					//				,{
+					//					text: '向右展开',
+					//					className: 'spread animated',
+					//					bpStyle: 'background-position: 0px -300px'
+					//				}, {
+					//					text: '向左展开',
+					//					className: 'flash animated',
+					//					bpStyle: 'background-position: -60px -300px'
+					//				}, {
+					//					text: '向上展开',
+					//					className: 'flash animated',
+					//					bpStyle: 'background-position: -120px -300px'
+					//				}, {
+					//					text: '向下展开',
+					//					className: 'flash animated',
+					//					bpStyle: 'background-position: -180px -300px'
+					//				}
 				]
 			}
 		},
@@ -248,29 +248,26 @@
 			setAlign(inx) {
 				var _self = this;
 				var index = _self.Tindex;
+				var height = document.getElementsByClassName('dragtext')[index].offsetHeight;
+				var width = document.getElementsByClassName('dragtext')[index].offsetWidth;
 				if(inx == 0) {
 					this.receivedData.textStyle.left = '0px'
-					document.getElementsByClassName('dragtext')[index].style.left = this.receivedData.textStyle.left
 				} else if(inx == 1) {
-					var height = document.getElementsByClassName('dragtext')[index].offsetHeight;
 					this.receivedData.textStyle.top = 'calc(50% - ' + height / 2 + 'px)';
-					document.getElementsByClassName('dragtext')[index].style.top = this.receivedData.textStyle.top
 				} else if(inx == 2) {
-					//					this.receivedData.textStyle['right'] = '0px'
-					//					document.getElementsByClassName('dragtext')[index].style.right = this.receivedData.textStyle.right
-					//					console.log(this.receivedData.textStyle)
-					var width = document.getElementsByClassName('dragtext')[index].offsetWidth
-					console.log(width)
 					this.receivedData.textStyle.left = 'calc(100% - ' + width + 'px)';
-					document.getElementsByClassName('dragtext')[index].style.left = this.receivedData.textStyle.left
 				} else if(inx == 3) {
 					this.receivedData.textStyle.top = '0px'
-					document.getElementsByClassName('dragtext')[index].style.top = this.receivedData.textStyle.top
+				} else if(inx == 4) {
+					this.receivedData.textStyle.top = 'calc(50% - ' + height / 2 + 'px)';
+					this.receivedData.textStyle.left = 'calc(50% - ' + width / 2 + 'px)';
+				} else if(inx == 5) {
+					this.receivedData.textStyle.top = 'calc(100% - ' + height + 'px)';
 				}
-//				this.$emit('setStyle', _self.receivedData, this.Tindex)
+				document.getElementsByClassName('dragtext')[index].style.top = this.receivedData.textStyle.top;
+				document.getElementsByClassName('dragtext')[index].style.left = this.receivedData.textStyle.left
 			},
 			colorChange() {
-				console.log(this.colorvalue)
 				this.receivedData.textStyle.color = this.colorvalue
 			},
 			addSize() {
@@ -284,24 +281,74 @@
 				var _self = this;
 				var num = this.receivedData.textStyle['font-size'].substring(0, this.receivedData.textStyle['font-size'].length - 2);
 				if(num > 12) {
-
 					num--;
-				}
+				};
 				this.receivedData.textStyle['font-size'] = num + 'px';
 				$('#fontSizeDrop').dropdown("set text", _self.receivedData.textStyle['font-size']);
-				//				var index = _self.Tindex;
-				//				document.getElementsByClassName('dragtext')[index].className = '';
-				//				document.getElementsByClassName('dragtext')[index].className = 'flash animated'
-				//				this.receivedData.animateStyle = 'flash animated'
 			},
 			setAnimate(data) {
 				var index = this.Tindex;
 				this.receivedData.animateStyle = data;
 				$('.dragtext').eq(index).addClass(data)
 				setTimeout(function() {
-//					document.getElementsByClassName('dragtext')[index].removeClass(data);
+					//					document.getElementsByClassName('dragtext')[index].removeClass(data);
 					$('.dragtext').eq(index).removeClass(data)
 				}, 1000);
+			},
+			setLevel(inx) {
+				var _self = this;
+				var newIndex = _self.receivedData.textStyle['z-index'];
+				var total = $('.dragtext').length+$('.dragpicture').length;
+				console.log(newIndex,total)
+				if(inx == 0 && newIndex < total) {
+					for(var i = 0; i < _self.$store.state.allData.imgbox.length; i++) {
+						if(newIndex + 1 == _self.$store.state.allData.imgbox[i].imgStyle['z-index']) {
+							_self.$store.state.allData.imgbox[i].imgStyle['z-index'] = newIndex
+						}
+					}
+					for(var i = 0; i < _self.$store.state.allData.textbox.length; i++) {
+						if(newIndex + 1 == _self.$store.state.allData.textbox[i].textStyle['z-index']) {
+							_self.$store.state.allData.textbox[i].textStyle['z-index'] = newIndex
+						}
+					}
+					_self.receivedData.textStyle['z-index'] = newIndex + 1
+				} else if(inx == 1 && newIndex > 1) {
+					for(var i = 0; i < _self.$store.state.allData.imgbox.length; i++) {
+						if(newIndex - 1 == _self.$store.state.allData.imgbox[i].imgStyle['z-index']) {
+							_self.$store.state.allData.imgbox[i].imgStyle['z-index'] = newIndex
+						}
+					}
+					for(var i = 0; i < _self.$store.state.allData.textbox.length; i++) {
+						if(newIndex - 1 == _self.$store.state.allData.textbox[i].textStyle['z-index']) {
+							_self.$store.state.allData.textbox[i].textStyle['z-index'] = newIndex
+						}
+					}
+					_self.receivedData.textStyle['z-index'] = newIndex - 1
+				} else if(inx == 2) {
+					for(var i = 0; i < _self.$store.state.allData.imgbox.length; i++) {
+						if(newIndex < _self.$store.state.allData.imgbox[i].imgStyle['z-index']) {
+							_self.$store.state.allData.imgbox[i].imgStyle['z-index'] = _self.$store.state.allData.imgbox[i].imgStyle['z-index']-1
+						}
+					}
+					for(var i = 0; i < _self.$store.state.allData.textbox.length; i++) {
+						if(newIndex < _self.$store.state.allData.textbox[i].textStyle['z-index']) {
+							_self.$store.state.allData.textbox[i].textStyle['z-index'] = _self.$store.state.allData.textbox[i].textStyle['z-index']-1
+						}
+					}
+					_self.receivedData.textStyle['z-index'] = total
+				} else if(inx == 3) {
+					for(var i = 0; i < _self.$store.state.allData.imgbox.length; i++) {
+						if(newIndex > _self.$store.state.allData.imgbox[i].imgStyle['z-index']) {
+							_self.$store.state.allData.imgbox[i].imgStyle['z-index'] = _self.$store.state.allData.imgbox[i].imgStyle['z-index']+1
+						}
+					}
+					for(var i = 0; i < _self.$store.state.allData.textbox.length; i++) {
+						if(newIndex > _self.$store.state.allData.textbox[i].textStyle['z-index']) {
+							_self.$store.state.allData.textbox[i].textStyle['z-index'] = _self.$store.state.allData.textbox[i].textStyle['z-index']+1
+						}
+					}
+					_self.receivedData.textStyle['z-index'] = 1
+				}
 			}
 		},
 		created() {
@@ -332,10 +379,7 @@
 					_self.receivedData.textStyle['font-size'] = value
 				}
 			})
-//			$('.animation-icon').click(function() {
-//				$('.animation-icon').removeClass('animation-icon-click')
-//				$(this).addClass('animation-icon-click')
-//			})
+			$('.animation-icon').css('background-image', 'url('+require("../../../static/backgroundImages/animBackground.png")+')')
 
 		},
 		components: {
@@ -427,14 +471,13 @@
 					height: 48px;
 					cursor: pointer;
 					margin: 0 auto;
-					background-image: url(../../../static/backgroundImages/maka_anim_enter.png);
 					background-size: 228px 348px;
 				}
 				.animation-icon-click {
 					background-image: url(../../../static/backgroundImages/maka_anim_enter_seleted.png) !important;
 				}
 				.animation-icon:hover {
-					background-image: url(../../../static/backgroundImages/maka_anim_enter_seleted.png);
+					background-image: url(../../../static/backgroundImages/maka_anim_enter_seleted.png) !important;
 				}
 				.animation-name {
 					font-size: 12px;

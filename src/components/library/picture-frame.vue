@@ -32,6 +32,20 @@
 				$(".zrcontent").removeClass('onafter')
 				$(this).addClass('onafter')
 			});
+			let MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+			let element = document.getElementsByClassName('dragpicture')[_self.PictureIndex]
+			this.observer = new MutationObserver((mutationList) => {
+				for(let mutation of mutationList) {
+//					console.log(mutation)
+					_self.imgMsg.imgStyle.top = mutation.target.style.top;
+					_self.imgMsg.imgStyle.left = mutation.target.style.left
+				}
+			});
+			this.observer.observe(element, {
+				attributes: true,
+				attributeFilter: ['style'],
+				attributeOldValue: true
+			})
 		},
 		components: {
 

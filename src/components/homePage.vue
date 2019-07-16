@@ -34,9 +34,9 @@
 			</div>
 			<!--编辑面板-->
 			<div id="editorIndex" class="thirteen wide column">
-				<div id="editorPage" :style='backgroundCss'>
-					<text-frame v-for="(item,index) in textBox" :key="index+item.textId" :psMsg="item" :textIndex="index" @setText="setText"></text-frame>
-					<picture-frame v-for="(img,inx) in imgBox" :key="inx+img.imgId" :imgMsg="img" :PictureIndex="inx" @setPicture="setPicture"></picture-frame>
+				<div id="editorPage" :style='mainData.templateBackgroundImg'>
+					<text-frame v-for="(item,index) in mainData.textbox" :key="index+item.textId" :psMsg="item" :textIndex="index" @setText="setText"></text-frame>
+					<picture-frame v-for="(img,inx) in mainData.imgbox" :key="inx+img.imgId" :imgMsg="img" :PictureIndex="inx" @setPicture="setPicture"></picture-frame>
 				</div>
 			</div>
 			<!--右侧操作栏-->
@@ -77,6 +77,11 @@
 	export default {
 		data() {
 			return {
+				mainData:{
+					templateBackgroundImg:'',
+					textbox:[],
+					imgbox:[]
+				},
 				menu: [{
 						name: '背景',
 						type: 'background',
@@ -93,16 +98,21 @@
 					}
 				],
 				currentView: 'background',
-				backgroundCss: '',
-				textBox: [],
-				imgBox: [],
 				textId: 0,
 				imgId: 0,
 				boxShow:false,
 				operationView: ''
 			}
 		},
+		watch:{
+//			mainData:'changeData'
+		},
 		methods: {
+			changeData(val){
+				var _self = this;
+				console.log(val)
+				_self.$store.state.allData = val
+			},
 			menuToggle(lis) {
 				this.currentView = lis.type
 			},
@@ -111,7 +121,7 @@
 				$('#savemodal').modal('show')
 			},
 			getbackground(data) {
-				this.backgroundCss = data
+				this.mainData.templateBackgroundImg = data
 			},
 			addText(data, te) {
 				var _self = this;
@@ -121,22 +131,20 @@
 					"textVal": te,
 					"defaultVal": te,
 					"animateStyle": "",
-					"active": true,
 					"textStyle": {
 						"top": "50%",
 						"left": "45%",
-						"z-index": "1",
+						"z-index": $('.dragtext').length+$('.dragpicture').length+1,
 						"color": "#000000",
 						"font-size": data,
 						"text-align": "",
 						"writing-mode": "",
 						"font-family": "",
 						"letter-spacing": "",
-						"background-color": "",
 						"line-height": "1"
 					}
 				}
-				_self.textBox.push(item);
+				_self.mainData.textbox.push(item);
 				_self.operationView = ''
 			},
 			addPicture(imgBase, width, height) {
@@ -147,15 +155,15 @@
 					"imgsrc": imgBase,
 					"animateStyle": "",
 					"imgStyle": {
-						"top": "",
-						"left": "",
+						"top": "10%",
+						"left": "10%",
 						"width": width * 2 + 'px',
 						"height": height * 2 + 'px',
-						"z-index": "1",
+						"z-index": $('.dragtext').length+$('.dragpicture').length+1,
 						"background-image": 'url(' + imgBase + ')'
 					}
 				}
-				_self.imgBox.push(item);
+				_self.mainData.imgbox.push(item);
 			},
 			setText(data, type,index) {
 				var _self = this;
@@ -178,21 +186,60 @@
 //				
 //			},
 			saveData() {
-				console.log(this.textBox)
-				console.log(this.imgBox)
 				var _self = this;
-				var jsonData = {
-					"templateBackgroundImg": this.backgroundCss,
-					"textbox": this.textBox,
-					"imgbox": this.imgBox
-				};
+				var allData = JSON.parse(JSON.stringify(_self.mainData));
+				var textBox = allData.textbox;
+				var imgBox = allData.imgbox;
+				for(var i = 0 ;i < textBox.length;i++){
+					var changeObj = {};
+					for(var k in textBox[i].textStyle){
+						var reg = new RegExp("-")
+						var change = k.replace(reg,"")
+						var str = textBox[i].textStyle[k];
+						if(str.length > 2){
+							if(str.substring(str.length-2) == 'px'){
+								textBox[i].textStyle[k] = Number(str.substring(0,str.length-2))/16 + 'rem'
+							}else if(str.substring(str.length-3) == 'px)'){
+								var rem = ' '+Number(str.substring(str.indexOf('-')+1,str.length-3))/16 + 'rem)'
+								console.log(str.substring(0,str.indexOf('-')+1))
+								textBox[i].textStyle[k] = String(str.substring(0,str.indexOf('-')+1) + rem)
+							}
+						}
+						changeObj[change] = textBox[i].textStyle[k]
+					}
+					textBox[i].textStyle = changeObj
+				}
+				for(var i = 0 ;i < imgBox.length;i++){
+					var changeObj = {};
+					for(var k in imgBox[i].imgStyle){
+						if(k !== 'background-image'){
+							
+							var reg = new RegExp("-")
+							var change = k.replace(reg,"")
+							var str = imgBox[i].imgStyle[k];
+							if(str.length > 2){
+								if(str.substring(str.length-2) == 'px'){
+									imgBox[i].imgStyle[k] = Number(str.substring(0,str.length-2))/16 + 'rem'
+								}else if(str.substring(str.length-3) == 'px)'){
+									var rem = ' '+Number(str.substring(str.indexOf('-')+1,str.length-3))/16 + 'rem)'
+									console.log(str.substring(0,str.indexOf('-')+1))
+									imgBox[i].imgStyle[k] = String(str.substring(0,str.indexOf('-')+1) + rem)
+								}
+							}
+							changeObj[change] = imgBox[i].imgStyle[k]
+						}
+					}
+					imgBox[i].imgStyle = changeObj
+				}
+				console.log(allData)
 				$.ajax({
 					type: 'POST',
 					url: "http://192.168.0.133:20009/api/bind/createfile_js",
 					//					contentType: "application/json",
-					data: JSON.stringify(jsonData),
+					data: JSON.stringify(allData),
 					success: function(data) {
 						console.log(data)
+						window.open(data)
 					},
 					error: function() {
 						console.log('请求失败')
@@ -203,6 +250,7 @@
 		},
 		mounted() {
 			var _self = this;
+			_self.$store.state.allData = this.mainData
 			document.onkeydown = function() {
 				if(window.event && window.event.keyCode == 13) {
 					window.event.returnValue = false;
@@ -326,8 +374,8 @@
 				min-height: 780px;
 				background-color: rgb(239, 239, 239);
 				#editorPage {
-					width: 432px !important;
-					height: 768px !important;
+					width: 414px !important;
+					height: 736px !important;
 					background-color: white;
 					overflow: hidden;
 					user-select: none;

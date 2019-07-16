@@ -1,9 +1,9 @@
 <template>
 	<div id="textSetPanel">
-		<div class="ui secondary three item teal pointing menu" style="margin: 0;">
+		<div class="ui secondary two item teal pointing menu" style="margin: 0;">
 			<a class="item active" @click="togglePage('textSet')">图片</a>
 			<a class="item" @click="togglePage('animateSet')">动画</a>
-			<a class="item" @click="togglePage('levelSet')">图层</a>
+			<!--<a class="item" @click="togglePage('levelSet')">图层</a>-->
 		</div>
 		<div id="textSet" class="ui fluid accordion" v-show="setType == 'textSet'">
 			<div class="title active"><i class="dropdown icon"></i>图片设置</div>
@@ -20,7 +20,7 @@
 					<div class="item">
 						图层
 					</div>
-					<div v-for="(list,index) in level" class="item" :data-tooltip="list.tooltip" data-inverted="">
+					<div v-for="(list,index) in level" @click="setLevel(index)" class="item" :data-tooltip="list.tooltip" data-inverted="">
 						<!--<icon :name="list.name" :w="list.size" :h="list.size"></icon>-->
 						<img class="imgBox" :src="list.url"></img>
 					</div>
@@ -32,7 +32,7 @@
 			<div class="content active">
 				<div class="animatino-list">
 					<div class="animation-item" v-for="item in animateList">
-						<div class="animation-icon" @click="setAnimate(item.className)" :style="item.bpStyle"></div>
+						<div class="animation-icon" :class="{'animation-icon-click':item.className == receivedData.animateStyle}" @click="setAnimate(item.className)" :style="item.bpStyle"></div>
 						<div class="animation-name">{{item.text}}</div>
 					</div>
 				</div>
@@ -175,22 +175,79 @@
 			setAlign(inx) {
 				var _self = this;
 				var index = _self.Tindex;
+				var height = document.getElementsByClassName('dragpicture')[index].offsetHeight;
+				var width = document.getElementsByClassName('dragpicture')[index].offsetWidth;
 				if(inx == 0) {
 					this.receivedData.imgStyle.left = '0px'
-					document.getElementsByClassName('dragpicture')[index].style.left = this.receivedData.imgStyle.left
 				} else if(inx == 1) {
-					var height = document.getElementsByClassName('dragpicture')[index].offsetHeight;
 					this.receivedData.imgStyle.top = 'calc(50% - ' + height / 2 + 'px)';
-					document.getElementsByClassName('dragpicture')[index].style.top = this.receivedData.imgStyle.top
 				} else if(inx == 2) {
-					var width = document.getElementsByClassName('dragpicture')[index].offsetWidth
 					this.receivedData.imgStyle.left = 'calc(100% - ' + width + 'px)';
-					document.getElementsByClassName('dragpicture')[index].style.left = this.receivedData.imgStyle.left
 				} else if(inx == 3) {
 					this.receivedData.imgStyle.top = '0px'
-					document.getElementsByClassName('dragpicture')[index].style.top = this.receivedData.imgStyle.top
+				}else if(inx == 4){
+					this.receivedData.imgStyle.top = 'calc(50% - ' + height / 2 + 'px)';
+					this.receivedData.imgStyle.left = 'calc(50% - ' + width/2 + 'px)';
+				}else if(inx == 5){
+					this.receivedData.imgStyle.top = 'calc(100% - ' + height + 'px)';
 				}
-//				this.$emit('setStyle', _self.receivedData, this.Tindex)
+				document.getElementsByClassName('dragpicture')[index].style.top = this.receivedData.imgStyle.top;
+				document.getElementsByClassName('dragpicture')[index].style.left = this.receivedData.imgStyle.left
+			},
+			setLevel(inx) {
+				var _self = this;
+				var newIndex = _self.receivedData.imgStyle['z-index'];
+				var total = $('.dragtext').length+$('.dragpicture').length;
+				console.log(newIndex,total)
+				if(inx == 0 && newIndex < total) {
+					for(var i = 0; i < _self.$store.state.allData.imgbox.length; i++) {
+						if(newIndex + 1 == _self.$store.state.allData.imgbox[i].imgStyle['z-index']) {
+							_self.$store.state.allData.imgbox[i].imgStyle['z-index'] = newIndex
+						}
+					}
+					for(var i = 0; i < _self.$store.state.allData.textbox.length; i++) {
+						if(newIndex + 1 == _self.$store.state.allData.textbox[i].textStyle['z-index']) {
+							_self.$store.state.allData.textbox[i].textStyle['z-index'] = newIndex
+						}
+					}
+					_self.receivedData.imgStyle['z-index'] = newIndex + 1
+				} else if(inx == 1 && newIndex > 1) {
+					for(var i = 0; i < _self.$store.state.allData.imgbox.length; i++) {
+						if(newIndex - 1 == _self.$store.state.allData.imgbox[i].imgStyle['z-index']) {
+							_self.$store.state.allData.imgbox[i].imgStyle['z-index'] = newIndex
+						}
+					}
+					for(var i = 0; i < _self.$store.state.allData.textbox.length; i++) {
+						if(newIndex - 1 == _self.$store.state.allData.textbox[i].textStyle['z-index']) {
+							_self.$store.state.allData.textbox[i].textStyle['z-index'] = newIndex
+						}
+					}
+					_self.receivedData.imgStyle['z-index'] = newIndex - 1
+				} else if(inx == 2) {
+					for(var i = 0; i < _self.$store.state.allData.imgbox.length; i++) {
+						if(newIndex < _self.$store.state.allData.imgbox[i].imgStyle['z-index']) {
+							_self.$store.state.allData.imgbox[i].imgStyle['z-index'] = _self.$store.state.allData.imgbox[i].imgStyle['z-index']-1
+						}
+					}
+					for(var i = 0; i < _self.$store.state.allData.textbox.length; i++) {
+						if(newIndex < _self.$store.state.allData.textbox[i].textStyle['z-index']) {
+							_self.$store.state.allData.textbox[i].textStyle['z-index'] = _self.$store.state.allData.textbox[i].textStyle['z-index']-1
+						}
+					}
+					_self.receivedData.imgStyle['z-index'] = total
+				} else if(inx == 3) {
+					for(var i = 0; i < _self.$store.state.allData.imgbox.length; i++) {
+						if(newIndex > _self.$store.state.allData.imgbox[i].imgStyle['z-index']) {
+							_self.$store.state.allData.imgbox[i].imgStyle['z-index'] = _self.$store.state.allData.imgbox[i].imgStyle['z-index']+1
+						}
+					}
+					for(var i = 0; i < _self.$store.state.allData.textbox.length; i++) {
+						if(newIndex > _self.$store.state.allData.textbox[i].textStyle['z-index']) {
+							_self.$store.state.allData.textbox[i].textStyle['z-index'] = _self.$store.state.allData.textbox[i].textStyle['z-index']+1
+						}
+					}
+					_self.receivedData.imgStyle['z-index'] = 1
+				}
 			},
 			setAnimate(data) {
 				var index = this.Tindex;
@@ -224,10 +281,7 @@
 					})
 				})
 			})
-			$('.animation-icon').click(function() {
-				$('.animation-icon').removeClass('animation-icon-click')
-				$(this).addClass('animation-icon-click')
-			})
+			$('.animation-icon').css('background-image', 'url('+require("../../../static/backgroundImages/animBackground.png")+')')
 
 		},
 		components: {
@@ -303,14 +357,14 @@
 					height: 48px;
 					cursor: pointer;
 					margin: 0 auto;
-					background-image: url(../../../static/backgroundImages/maka_anim_enter.png);
+					/*background-image: url(../../../static/backgroundImages/animBackground.png);*/
 					background-size: 228px 348px;
 				}
 				.animation-icon-click {
 					background-image: url(../../../static/backgroundImages/maka_anim_enter_seleted.png) !important;
 				}
 				.animation-icon:hover {
-					background-image: url(../../../static/backgroundImages/maka_anim_enter_seleted.png);
+					background-image: url(../../../static/backgroundImages/maka_anim_enter_seleted.png) !important;
 				}
 				.animation-name {
 					font-size: 12px;
