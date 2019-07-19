@@ -1,5 +1,5 @@
 <template>
-	<div class="dragtext" :style="psMsg.textStyle" :class="psMsg.animateStyle" @click="changeInner(psMsg)">
+	<div class="dragtext" :style="psMsg.textStyle" :class="psMsg.animateStyle" @click="changeInner(psMsg)" @click.right="rightEvent($event)">
 		<div class="zrcontent" contenteditable="true" @input="changeText" v-cloak v-text="psMsg.defaultVal"></div>
 	</div>
 </template>
@@ -21,6 +21,12 @@
 			changeInner(event) {
 				var _self = this;
 				this.$emit('setText', event, 'textAttribute', _self.textIndex)
+			},
+			rightEvent($event){
+				var _self = this;
+				var left = $event.clientX - document.getElementById('editorPage').offsetLeft - document.getElementById('editorIndex').offsetLeft;
+				var top = $event.clientY - document.getElementById('editorPage').offsetTop - document.getElementById('editorIndex').offsetTop;
+				this.$emit('showRdrop',left+5,top+5,_self.textIndex,'text')
 			},
 			changeText($event) {
 				this.psMsg['textVal'] = $event.target.innerText

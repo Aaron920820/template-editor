@@ -35,8 +35,10 @@
 			<!--编辑面板-->
 			<div id="editorIndex" class="thirteen wide column">
 				<div id="editorPage" :style='mainData.templateBackgroundImg'>
-					<text-frame v-for="(item,index) in mainData.textbox" :key="index+item.textId" :psMsg="item" :textIndex="index" @setText="setText"></text-frame>
+					<text-frame v-for="(item,index) in mainData.textbox" :key="index+item.textId" :psMsg="item" :textIndex="index" @setText="setText" @showRdrop="showRdrop"></text-frame>
 					<picture-frame v-for="(img,inx) in mainData.imgbox" :key="inx+img.imgId" :imgMsg="img" :PictureIndex="inx" @setPicture="setPicture"></picture-frame>
+					<!--右键选项框-->
+					<rdrop @click='removeItem' v-if="dropShow" :pTop="rTop" :pLeft="rLeft" :removeType="removeIndex" :removeIndex="removeIndex"></rdrop>
 				</div>
 			</div>
 			<!--右侧操作栏-->
@@ -62,6 +64,7 @@
 				</div>
 			</div>
 		</div>
+		
 	</div>
 </template>
 
@@ -74,6 +77,7 @@
 	import pictureFrame from './library/picture-frame'
 	import textAttribute from './operation/text-attribute'
 	import pictureAttribute from './operation/picture-attribute'
+	import Rdrop from './right-key-dropdown'
 	export default {
 		data() {
 			return {
@@ -100,8 +104,12 @@
 				currentView: 'background',
 				textId: 0,
 				imgId: 0,
-				boxShow:false,
-				operationView: ''
+				operationView: '',
+				rLeft:'',
+				rTop:'',
+				dropShow:false,
+				removeType:'',
+				removeIndex:''
 			}
 		},
 		watch:{
@@ -179,12 +187,17 @@
 					_self.$refs.edit.editPicture(data,index);
 				})
 			},
-//			setStyle(data,index,type){
-//				var _self = this;
-//				var dataS = JSON.parse(JSON.stringify(data))
-//				Vue.set(_self.textBox,index,dataS)
-//				
-//			},
+			showRdrop(left,top,index,type){
+				var _self = this;
+				this.removeIndex = index;
+				this.removeType = type
+				this.dropShow = true;
+				this.rLeft = left;
+				this.rTop = top
+			},
+			removeItem(){
+				console.log('remove')
+			},
 			saveData() {
 				var _self = this;
 				var allData = JSON.parse(JSON.stringify(_self.mainData));
@@ -266,6 +279,11 @@
 				$(".zrcontent").removeClass('onafter');
 				_self.operationView = ''
 			})
+			$(document).click(function(e){
+				var target = $(e.target);
+				if(target.closest(".rDropdown").length != 0) return;
+				_self.dropShow = false;
+			})
 		},
 		components: {
 			templateBox,
@@ -274,7 +292,8 @@
 			textAttribute,
 			pictureAttribute,
 			'text-frame': textFrame,
-			'picture-frame': pictureFrame
+			'picture-frame': pictureFrame,
+			'rdrop':Rdrop
 		}
 
 	}
