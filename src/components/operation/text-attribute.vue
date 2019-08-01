@@ -29,7 +29,7 @@
 					<div class="item">
 						样式
 					</div>
-					<div class="item" data-tooltip="加粗" data-inverted="">
+					<div class="item" :class="{'itemActive':receivedData.textStyle['font-weight'] == 600}" @click="fontblod" data-tooltip="加粗" data-inverted="">
 						<icon name="B-icon" :w="20" :h="20"></icon>
 					</div>
 					<div class="item" data-tooltip="倾斜" data-inverted="">
@@ -237,6 +237,7 @@
 			editText(data, index) {
 				var _self = this;
 				this.receivedData = data;
+				console.log(this.receivedData)
 				this.Tindex = index;
 				this.colorvalue = this.receivedData.textStyle.color
 				this.fontSizeVal = this.receivedData.textStyle['font-size']
@@ -245,6 +246,7 @@
 			togglePage(type) {
 				this.setType = type
 			},
+			//文本对齐
 			setAlign(inx) {
 				var _self = this;
 				var index = _self.Tindex;
@@ -267,9 +269,22 @@
 				document.getElementsByClassName('dragtext')[index].style.top = this.receivedData.textStyle.top;
 				document.getElementsByClassName('dragtext')[index].style.left = this.receivedData.textStyle.left
 			},
+			//加粗
+			fontblod(){
+				var index = this.Tindex;
+				if(this.receivedData.textStyle['font-weight'] == 600){
+					this.receivedData.textStyle['font-weight'] = 500;	
+				}else{
+					this.receivedData.textStyle['font-weight'] = 600;
+				}
+				document.getElementsByClassName('dragtext')[index].style['font-weight'] = this.receivedData.textStyle['font-weight']
+				
+			},
+			//改变颜色
 			colorChange() {
 				this.receivedData.textStyle.color = this.colorvalue
 			},
+			//增加字体大小
 			addSize() {
 				var _self = this;
 				var num = this.receivedData.textStyle['font-size'].substring(0, this.receivedData.textStyle['font-size'].length - 2);
@@ -277,6 +292,7 @@
 				this.receivedData.textStyle['font-size'] = num + 'px';
 				$('#fontSizeDrop').dropdown("set text", _self.receivedData.textStyle['font-size'])
 			},
+			//减小字体大小
 			cutSize() {
 				var _self = this;
 				var num = this.receivedData.textStyle['font-size'].substring(0, this.receivedData.textStyle['font-size'].length - 2);
@@ -286,6 +302,7 @@
 				this.receivedData.textStyle['font-size'] = num + 'px';
 				$('#fontSizeDrop').dropdown("set text", _self.receivedData.textStyle['font-size']);
 			},
+			//设置动画
 			setAnimate(data) {
 				var index = this.Tindex;
 				this.receivedData.animateStyle = data;
@@ -362,15 +379,9 @@
 			})
 			$('.ui.accordion').accordion();
 			$('.zrBox .item').not(":first").mousedown(function() {
-				$(this).css({
-					'background': '#00c4cd',
-					'color': 'rgb(255,255,255)'
-				})
+				$(this).addClass('itemActive')
 				$(this).mouseup(function() {
-					$(this).css({
-						'background': '',
-						'color': '#7d8893'
-					})
+					$(this).removeClass('itemActive')
 				})
 			})
 			$('#fontSizeDrop').dropdown({
@@ -422,6 +433,10 @@
 					}
 					.item:hover:not(:first-child) {
 						background-color: rgb(236, 236, 236);
+					}
+					.itemActive{
+						background: #00c4cd !important;
+						color: rgb(255,255,255) !important
 					}
 				}
 				.formSytle:last-child {

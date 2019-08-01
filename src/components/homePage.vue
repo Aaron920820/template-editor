@@ -38,7 +38,7 @@
 					<text-frame v-for="(item,index) in mainData.textbox" :key="index+item.textId" :psMsg="item" :textIndex="index" @setText="setText" @showRdrop="showRdrop"></text-frame>
 					<picture-frame v-for="(img,inx) in mainData.imgbox" :key="inx+img.imgId" :imgMsg="img" :PictureIndex="inx" @setPicture="setPicture"></picture-frame>
 					<!--右键选项框-->
-					<rdrop @click='removeItem' v-if="dropShow" :pTop="rTop" :pLeft="rLeft" :removeType="removeIndex" :removeIndex="removeIndex"></rdrop>
+					<rdrop @remove='removeItem' v-if="dropShow" :pTop="rTop" :pLeft="rLeft" :removeType="removeType" :removeIndex="removeIndex"></rdrop>
 				</div>
 			</div>
 			<!--右侧操作栏-->
@@ -131,6 +131,7 @@
 			getbackground(data) {
 				this.mainData.templateBackgroundImg = data
 			},
+			//添加文本框
 			addText(data, te) {
 				var _self = this;
 				_self.textId++;
@@ -140,6 +141,7 @@
 					"defaultVal": te,
 					"animateStyle": "",
 					"textStyle": {
+						"width":"",
 						"top": "50%",
 						"left": "45%",
 						"z-index": $('.dragtext').length+$('.dragpicture').length+1,
@@ -147,6 +149,7 @@
 						"font-size": data,
 						"text-align": "",
 						"writing-mode": "",
+						"font-weight":"500",
 						"font-family": "",
 						"letter-spacing": "",
 						"line-height": "1"
@@ -155,6 +158,7 @@
 				_self.mainData.textbox.push(item);
 				_self.operationView = ''
 			},
+			//添加图片
 			addPicture(imgBase, width, height) {
 				var _self = this;
 				_self.imgId++;
@@ -188,6 +192,7 @@
 				})
 			},
 			showRdrop(left,top,index,type){
+				console.log(left,top,index,type)
 				var _self = this;
 				this.removeIndex = index;
 				this.removeType = type
@@ -195,14 +200,15 @@
 				this.rLeft = left;
 				this.rTop = top
 			},
-			removeItem(){
-				console.log('remove')
+			removeItem(data){
+				this.dropShow = data
 			},
 			saveData() {
 				var _self = this;
 				var allData = JSON.parse(JSON.stringify(_self.mainData));
 				var textBox = allData.textbox;
 				var imgBox = allData.imgbox;
+				//转换成rem单位适配移动端页面
 				for(var i = 0 ;i < textBox.length;i++){
 					var changeObj = {};
 					for(var k in textBox[i].textStyle){
@@ -211,9 +217,9 @@
 						var str = textBox[i].textStyle[k];
 						if(str.length > 2){
 							if(str.substring(str.length-2) == 'px'){
-								textBox[i].textStyle[k] = Number(str.substring(0,str.length-2))/16 + 'rem'
+								textBox[i].textStyle[k] = Number(str.substring(0,str.length-2))/16.48 + 'rem'
 							}else if(str.substring(str.length-3) == 'px)'){
-								var rem = ' '+Number(str.substring(str.indexOf('-')+1,str.length-3))/16 + 'rem)'
+								var rem = ' '+Number(str.substring(str.indexOf('-')+1,str.length-3))/16.48 + 'rem)'
 								console.log(str.substring(0,str.indexOf('-')+1))
 								textBox[i].textStyle[k] = String(str.substring(0,str.indexOf('-')+1) + rem)
 							}
@@ -232,9 +238,9 @@
 							var str = imgBox[i].imgStyle[k];
 							if(str.length > 2){
 								if(str.substring(str.length-2) == 'px'){
-									imgBox[i].imgStyle[k] = Number(str.substring(0,str.length-2))/16 + 'rem'
+									imgBox[i].imgStyle[k] = Number(str.substring(0,str.length-2))/16.48 + 'rem'
 								}else if(str.substring(str.length-3) == 'px)'){
-									var rem = ' '+Number(str.substring(str.indexOf('-')+1,str.length-3))/16 + 'rem)'
+									var rem = ' '+Number(str.substring(str.indexOf('-')+1,str.length-3))/16.48 + 'rem)'
 									console.log(str.substring(0,str.indexOf('-')+1))
 									imgBox[i].imgStyle[k] = String(str.substring(0,str.indexOf('-')+1) + rem)
 								}
@@ -303,6 +309,7 @@
 	.homePage {
 		width: 100%;
 		height: 100%;
+		overflow: hidden;
 		.zr_header {
 			background: -webkit-linear-gradient(left, rgb(10, 185, 201), rgb(92, 96, 173));
 			/* Safari 5.1 - 6.0 */
@@ -393,13 +400,13 @@
 				min-height: 780px;
 				background-color: rgb(239, 239, 239);
 				#editorPage {
-					width: 414px !important;
-					height: 736px !important;
+					width: 405px !important;
+					height: 720px !important;
 					background-color: white;
 					overflow: hidden;
 					user-select: none;
 					position: relative;
-					margin: 0 auto;
+					left:calc(50% - 237px);
 					outline: 2px #00c4cd solid;
 					background-size: 100% 100% !important;
 					background-repeat: no-repeat !important;

@@ -10,11 +10,7 @@
 		data() {
 			return {
 				currentView: 'textBox',
-				observer: null,
-				recordOldValue: { // 记录下旧的宽高数据，避免重复触发回调函数
-					width: '0',
-					height: '0'
-				}
+				observer: null
 			}
 		},
 		methods: {
@@ -22,22 +18,22 @@
 				var _self = this;
 				this.$emit('setText', event, 'textAttribute', _self.textIndex)
 			},
+			//右键获取鼠标位置，显示删除按钮
 			rightEvent($event){
 				var _self = this;
 				var left = $event.clientX - document.getElementById('editorPage').offsetLeft - document.getElementById('editorIndex').offsetLeft;
 				var top = $event.clientY - document.getElementById('editorPage').offsetTop - document.getElementById('editorIndex').offsetTop;
-				this.$emit('showRdrop',left+5,top+5,_self.textIndex,'text')
+				this.$emit('showRdrop',left+5,top+5,_self.textIndex,'textbox')
 			},
 			changeText($event) {
 				this.psMsg['textVal'] = $event.target.innerText
 			}
 		},
-		created() {
-
-		},
 		mounted() {
 			var _self = this;
+			//使元素可拖拽拉伸
 			$('.dragtext').l_zoom('free').l_drag();
+			//元素拉伸边框初始化隐藏
 			$(".border_all").hide();
 			$(".zrcontent").removeClass('onafter')
 
@@ -47,6 +43,7 @@
 				$(".zrcontent").removeClass('onafter')
 				$(this).addClass('onafter')
 			});
+			//实时监听元素定位位置
 			let MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
 			let element = document.getElementsByClassName('dragtext')[_self.textIndex]
 			this.observer = new MutationObserver((mutationList) => {
@@ -54,6 +51,7 @@
 //					console.log(mutation)
 					_self.psMsg.textStyle.top = mutation.target.style.top;
 					_self.psMsg.textStyle.left = mutation.target.style.left
+					_self.psMsg.textStyle.width = mutation.target.style.width
 				}
 			});
 			this.observer.observe(element, {
@@ -85,17 +83,15 @@
 		height: auto;
 		word-break: break-all;
 		.zrcontent {
-			height: 100%;
-			border: 1px solid rgba(255, 255, 255, 0);
+			outline: 1px solid rgba(255, 255, 255, 0);
 			overflow: hidden;
-			text-overflow: ellipsis;
 		}
 		.zrcontent:focus {
 			outline: none;
 			border: none;
 		}
 		.onafter {
-			border: 1px dashed rgba(0, 0, 0, 0.3) !important;
+			outline: 1px dashed rgba(0, 0, 0, 0.3) !important;
 		}
 	}
 </style>

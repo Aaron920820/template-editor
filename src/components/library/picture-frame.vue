@@ -9,7 +9,8 @@
 		props:['imgMsg','PictureIndex'],
 		data() {
 			return {
-				currentView: 'textBox'
+				currentView: 'textBox',
+				observer:null
 			}
 		},
 		methods: {
@@ -67,15 +68,15 @@
 		.zrcontent {
 			width: 100%;
 			height: 100%;
-			border: 1px solid rgba(255,255,255,0);
+			outline: 1px solid rgba(255,255,255,0);
 			overflow:hidden;
 		}
 		.zrcontent:focus{
-			outline: none;
-			border: none;
+			/*outline: none;
+			border: none;*/
 		}
 		.onafter{
-			border:1px solid rgba(0,0,0,0.3) !important
+			outline:1px dashed rgba(0,0,0,0.3) !important
 		}
 	}
 </style>

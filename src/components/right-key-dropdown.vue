@@ -13,8 +13,12 @@
 			}
 		},
 		methods: {
+			//删除功能
 			removeItem(){
-				
+				var _self = this;
+				this.$store.state.allData[this.removeType].splice(this.removeIndex,1)
+				console.log(this.$store.state.allData)
+				this.$emit('remove',false)
 			}
 		},
 		watch: {
