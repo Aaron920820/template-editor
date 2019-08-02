@@ -26,13 +26,21 @@
 				this.$emit('showRdrop',left+5,top+5,_self.textIndex,'textbox')
 			},
 			changeText($event) {
-				this.psMsg['textVal'] = $event.target.innerText
+				var doc = document.getElementsByClassName('dragtext')[this.textIndex].innerHTML;
+//				var newStr = doc.substring(1,doc.length-1);
+				function convert(literal) {
+				    var result = literal.substring(1, literal.length - 1);
+				    result = result.replace(/'/g, '\'');
+				    return "'" + result + "'";
+				}
+				this.psMsg.textVal = convert(doc);
+//				this.psMsg.textVal = this.psMsg.textVal.substring(1,this.psMsg.textVal.length-1)
 			}
 		},
 		mounted() {
 			var _self = this;
 			//使元素可拖拽拉伸
-			$('.dragtext').l_zoom('free').l_drag();
+			$('.dragtext').l_zoom('free').l_drag(true);
 			//元素拉伸边框初始化隐藏
 			$(".border_all").hide();
 			$(".zrcontent").removeClass('onafter')

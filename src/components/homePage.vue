@@ -270,14 +270,14 @@
 		mounted() {
 			var _self = this;
 			_self.$store.state.allData = this.mainData
-			document.onkeydown = function() {
-				if(window.event && window.event.keyCode == 13) {
-					window.event.returnValue = false;
-				}
-			}
-			document.oncontextmenu = function() {　　
-				return false;
-			}
+//			document.onkeydown = function() {
+//				if(window.event && window.event.keyCode == 13) {
+//					window.event.returnValue = false;
+//				}
+//			}
+//			document.oncontextmenu = function() {　　
+//				return false;
+//			}
 			$('#editorPage').click(function(e){
 				var target = $(e.target);
 				if(target.closest(".zrcontent").length != 0) return;

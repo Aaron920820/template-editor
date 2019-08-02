@@ -25,7 +25,7 @@
 						<img class="imgBox" :src="list.url"></img>
 					</div>
 				</div>
-				<div class="formSytle">
+				<div class="formSytle" v-if="receivedData !== ''">
 					<div class="item">
 						样式
 					</div>
@@ -48,11 +48,13 @@
 						<icon name="text-right" :w="22" :h="22"></icon>
 					</div>
 				</div>
-				<div class="formSytle">
+				<div class="formSytle" style="border-bottom: none !important;">
 					<div class="item">
 						颜色
 					</div>
-					<input type="color" id="colorChange" v-model="colorvalue" v-on:change="colorChange()">
+					<div id="picker" @click="colorChange">
+						<chrome-picker id="chromePicker" v-show='pickerShow' v-model="colors" @input="updateValue"></chrome-picker>
+					</div>
 				</div>
 				<div class="fontSet">
 					<div class="zritem">
@@ -92,6 +94,7 @@
 </template>
 
 <script>
+	import { Chrome } from 'vue-color'
 	export default {
 		props: [],
 		data() {
@@ -101,6 +104,29 @@
 				Tindex: '',
 				colorvalue: '',
 				fontSizeVal: '',
+				pickerShow: false,
+				colors: {
+					hex: '#194d33',
+					hsl: {
+						h: 150,
+						s: 0.5,
+						l: 0.2,
+						a: 1
+					},
+					hsv: {
+						h: 150,
+						s: 0.66,
+						v: 0.30,
+						a: 1
+					},
+					rgba: {
+						r: 25,
+						g: 77,
+						b: 51,
+						a: 1
+					},
+					a: 1
+				},
 				align: [{
 					tooltip: "左对齐",
 					name: "left",
@@ -233,15 +259,17 @@
 				]
 			}
 		},
+
 		methods: {
+			//初始化进入操作页面
 			editText(data, index) {
 				var _self = this;
 				this.receivedData = data;
-				console.log(this.receivedData)
 				this.Tindex = index;
 				this.colorvalue = this.receivedData.textStyle.color
 				this.fontSizeVal = this.receivedData.textStyle['font-size']
 				$('#fontSizeDrop').dropdown("set text", _self.receivedData.textStyle['font-size'])
+				$('#picker').css('background', _self.receivedData.textStyle.color)
 			},
 			togglePage(type) {
 				this.setType = type
@@ -270,19 +298,24 @@
 				document.getElementsByClassName('dragtext')[index].style.left = this.receivedData.textStyle.left
 			},
 			//加粗
-			fontblod(){
+			fontblod() {
 				var index = this.Tindex;
-				if(this.receivedData.textStyle['font-weight'] == 600){
-					this.receivedData.textStyle['font-weight'] = 500;	
-				}else{
+				if(this.receivedData.textStyle['font-weight'] == 600) {
+					this.receivedData.textStyle['font-weight'] = 500;
+				} else {
 					this.receivedData.textStyle['font-weight'] = 600;
 				}
 				document.getElementsByClassName('dragtext')[index].style['font-weight'] = this.receivedData.textStyle['font-weight']
-				
+
 			},
 			//改变颜色
+			updateValue() {
+				var _self = this;
+				_self.receivedData.textStyle.color = _self.colors.hex8;
+				$('#picker').css('background', _self.receivedData.textStyle.color)
+			},
 			colorChange() {
-				this.receivedData.textStyle.color = this.colorvalue
+				this.pickerShow = true
 			},
 			//增加字体大小
 			addSize() {
@@ -315,8 +348,8 @@
 			setLevel(inx) {
 				var _self = this;
 				var newIndex = _self.receivedData.textStyle['z-index'];
-				var total = $('.dragtext').length+$('.dragpicture').length;
-				console.log(newIndex,total)
+				var total = $('.dragtext').length + $('.dragpicture').length;
+				console.log(newIndex, total)
 				if(inx == 0 && newIndex < total) {
 					for(var i = 0; i < _self.$store.state.allData.imgbox.length; i++) {
 						if(newIndex + 1 == _self.$store.state.allData.imgbox[i].imgStyle['z-index']) {
@@ -344,24 +377,24 @@
 				} else if(inx == 2) {
 					for(var i = 0; i < _self.$store.state.allData.imgbox.length; i++) {
 						if(newIndex < _self.$store.state.allData.imgbox[i].imgStyle['z-index']) {
-							_self.$store.state.allData.imgbox[i].imgStyle['z-index'] = _self.$store.state.allData.imgbox[i].imgStyle['z-index']-1
+							_self.$store.state.allData.imgbox[i].imgStyle['z-index'] = _self.$store.state.allData.imgbox[i].imgStyle['z-index'] - 1
 						}
 					}
 					for(var i = 0; i < _self.$store.state.allData.textbox.length; i++) {
 						if(newIndex < _self.$store.state.allData.textbox[i].textStyle['z-index']) {
-							_self.$store.state.allData.textbox[i].textStyle['z-index'] = _self.$store.state.allData.textbox[i].textStyle['z-index']-1
+							_self.$store.state.allData.textbox[i].textStyle['z-index'] = _self.$store.state.allData.textbox[i].textStyle['z-index'] - 1
 						}
 					}
 					_self.receivedData.textStyle['z-index'] = total
 				} else if(inx == 3) {
 					for(var i = 0; i < _self.$store.state.allData.imgbox.length; i++) {
 						if(newIndex > _self.$store.state.allData.imgbox[i].imgStyle['z-index']) {
-							_self.$store.state.allData.imgbox[i].imgStyle['z-index'] = _self.$store.state.allData.imgbox[i].imgStyle['z-index']+1
+							_self.$store.state.allData.imgbox[i].imgStyle['z-index'] = _self.$store.state.allData.imgbox[i].imgStyle['z-index'] + 1
 						}
 					}
 					for(var i = 0; i < _self.$store.state.allData.textbox.length; i++) {
 						if(newIndex > _self.$store.state.allData.textbox[i].textStyle['z-index']) {
-							_self.$store.state.allData.textbox[i].textStyle['z-index'] = _self.$store.state.allData.textbox[i].textStyle['z-index']+1
+							_self.$store.state.allData.textbox[i].textStyle['z-index'] = _self.$store.state.allData.textbox[i].textStyle['z-index'] + 1
 						}
 					}
 					_self.receivedData.textStyle['z-index'] = 1
@@ -376,25 +409,32 @@
 			$('.ui.menu .item').click(function() {
 				$(this).siblings('.item').removeClass('active')
 				$(this).addClass('active')
-			})
+			});
 			$('.ui.accordion').accordion();
 			$('.zrBox .item').not(":first").mousedown(function() {
 				$(this).addClass('itemActive')
 				$(this).mouseup(function() {
 					$(this).removeClass('itemActive')
 				})
-			})
+			});
+			//semantic-ui下拉框回调函数
 			$('#fontSizeDrop').dropdown({
 				onChange: function(value, text, $selectedItem) {
 					console.log(value)
 					_self.receivedData.textStyle['font-size'] = value
 				}
-			})
-			$('.animation-icon').css('background-image', 'url('+require("../../../static/backgroundImages/animBackground.png")+')')
+			});
+			//点击颜色选择器以外关闭
+			$(document).click(function(event) {
+				var target = $(event.target);
+				if(target.closest("#chromePicker").length !== 0 || target.closest("#picker").length !== 0) return;
+				_self.pickerShow = false
+			});
+			$('.animation-icon').css('background-image', 'url(' + require("../../../static/backgroundImages/animBackground.png") + ')')
 
 		},
 		components: {
-
+			'chrome-picker': Chrome
 		}
 
 	}
@@ -434,9 +474,24 @@
 					.item:hover:not(:first-child) {
 						background-color: rgb(236, 236, 236);
 					}
-					.itemActive{
+					.itemActive {
 						background: #00c4cd !important;
-						color: rgb(255,255,255) !important
+						color: rgb(255, 255, 255) !important
+					}
+					#picker {
+						position: relative;
+						width: 30px;
+						height: 30px;
+						background-color: #000000;
+						#chromePicker {
+							position: absolute;
+							top: 35px;
+							z-index: 888;
+						}
+					}
+					#picker:hover {
+						cursor: pointer;
+						box-shadow: #fff 0px 0px 1px 1px inset;
 					}
 				}
 				.formSytle:last-child {
