@@ -180,7 +180,7 @@
 				if(inx == 0) {
 					this.receivedData.imgStyle.left = '0px'
 				} else if(inx == 1) {
-					this.receivedData.imgStyle.top = 'calc(50% - ' + height / 2 + 'px)';
+					this.receivedData.imgStyle.left = 'calc(50% - ' + width / 2 + 'px)';
 				} else if(inx == 2) {
 					this.receivedData.imgStyle.left = 'calc(100% - ' + width + 'px)';
 				} else if(inx == 3) {

@@ -24,7 +24,7 @@
 		},
 		mounted() {
 			var _self = this;
-			$('.dragpicture').l_zoom('free').l_drag();
+			$('.dragpicture').l_zoom('free').l_drag(true);
 			$(".border_all").hide();
 			$(".zrcontent").removeClass('onafter')
 			$(".zrcontent").mousedown(function() {

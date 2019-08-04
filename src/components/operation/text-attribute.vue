@@ -32,19 +32,19 @@
 					<div class="item" :class="{'itemActive':receivedData.textStyle['font-weight'] == 600}" @click="fontblod" data-tooltip="加粗" data-inverted="">
 						<icon name="B-icon" :w="20" :h="20"></icon>
 					</div>
-					<div class="item" data-tooltip="倾斜" data-inverted="">
+					<div class="item" :class="{'itemActive':receivedData.textStyle['font-style'] == 'italic'}" @click="fontItalic" data-tooltip="倾斜" data-inverted="">
 						<icon name="I-icon" :w="20" :h="20"></icon>
 					</div>
-					<div class="item" data-tooltip="下划线" data-inverted="">
+					<div class="item" :class="{'itemActive':receivedData.textStyle['text-decoration'] == 'underline'}" @click="fontDecoration" data-tooltip="下划线" data-inverted="">
 						<icon name="U-icon" :w="20" :h="20"></icon>
 					</div>
-					<div class="item" data-tooltip="左对齐文本" data-inverted="">
+					<div class="item" :class="{'itemActive':receivedData.textStyle['text-align'] == 'left'}" @click="textAlign('left')" data-tooltip="左对齐文本" data-inverted="">
 						<icon name="text-left" :w="22" :h="22"></icon>
 					</div>
-					<div class="item" data-tooltip="居中对齐文本" data-inverted="">
+					<div class="item" :class="{'itemActive':receivedData.textStyle['text-align'] == 'center'}" @click="textAlign('center')" data-tooltip="居中对齐文本" data-inverted="">
 						<icon name="text-center" :w="22" :h="22"></icon>
 					</div>
-					<div class="item" data-tooltip="右对齐文本" data-inverted="">
+					<div class="item" :class="{'itemActive':receivedData.textStyle['text-align'] == 'right'}"  @click="textAlign('right')"data-tooltip="右对齐文本" data-inverted="">
 						<icon name="text-right" :w="22" :h="22"></icon>
 					</div>
 				</div>
@@ -102,31 +102,9 @@
 				setType: 'textSet',
 				receivedData: '',
 				Tindex: '',
-				colorvalue: '',
 				fontSizeVal: '',
 				pickerShow: false,
-				colors: {
-					hex: '#194d33',
-					hsl: {
-						h: 150,
-						s: 0.5,
-						l: 0.2,
-						a: 1
-					},
-					hsv: {
-						h: 150,
-						s: 0.66,
-						v: 0.30,
-						a: 1
-					},
-					rgba: {
-						r: 25,
-						g: 77,
-						b: 51,
-						a: 1
-					},
-					a: 1
-				},
+				colors: '#000000',
 				align: [{
 					tooltip: "左对齐",
 					name: "left",
@@ -266,7 +244,7 @@
 				var _self = this;
 				this.receivedData = data;
 				this.Tindex = index;
-				this.colorvalue = this.receivedData.textStyle.color
+				this.colors = this.receivedData.textStyle.color
 				this.fontSizeVal = this.receivedData.textStyle['font-size']
 				$('#fontSizeDrop').dropdown("set text", _self.receivedData.textStyle['font-size'])
 				$('#picker').css('background', _self.receivedData.textStyle.color)
@@ -283,7 +261,7 @@
 				if(inx == 0) {
 					this.receivedData.textStyle.left = '0px'
 				} else if(inx == 1) {
-					this.receivedData.textStyle.top = 'calc(50% - ' + height / 2 + 'px)';
+					this.receivedData.textStyle.left = 'calc(50% - ' + width / 2 + 'px)';
 				} else if(inx == 2) {
 					this.receivedData.textStyle.left = 'calc(100% - ' + width + 'px)';
 				} else if(inx == 3) {
@@ -307,6 +285,32 @@
 				}
 				document.getElementsByClassName('dragtext')[index].style['font-weight'] = this.receivedData.textStyle['font-weight']
 
+			},
+			//斜体
+			fontItalic(){
+				var index = this.Tindex;
+				if(this.receivedData.textStyle['font-style'] == 'italic') {
+					this.receivedData.textStyle['font-style'] = 'normal';
+				} else {
+					this.receivedData.textStyle['font-style'] = 'italic';
+				}
+				document.getElementsByClassName('dragtext')[index].style['font-style'] = this.receivedData.textStyle['font-style']
+			},
+			//下划线
+			fontDecoration(){
+				var index = this.Tindex;
+				console.log(this.receivedData.textStyle['text-decoration'])
+				if(this.receivedData.textStyle['text-decoration'] == 'underline') {
+					this.receivedData.textStyle['text-decoration'] = 'none';
+				} else {
+					this.receivedData.textStyle['text-decoration'] = 'underline';
+				}
+				document.getElementsByClassName('dragtext')[index].style['text-decoration'] = this.receivedData.textStyle['text-decoration']
+			},
+			textAlign(type){
+				var index = this.Tindex;
+				this.receivedData.textStyle['text-align'] = type;
+				document.getElementsByClassName('dragtext')[index].style['text-align'] = this.receivedData.textStyle['text-align']
 			},
 			//改变颜色
 			updateValue() {

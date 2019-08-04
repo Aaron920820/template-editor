@@ -91,6 +91,7 @@
 		height: auto;
 		word-break: break-all;
 		.zrcontent {
+			padding: 10px 0px;
 			outline: 1px solid rgba(255, 255, 255, 0);
 			overflow: hidden;
 		}

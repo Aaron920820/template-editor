@@ -135,21 +135,25 @@
 			addText(data, te) {
 				var _self = this;
 				_self.textId++;
+				var top = Number(data.slice(0,data.length-2))+20;
+				console.log(top)
 				var item = {
 					"textId": "text" + _self.textId,
 					"textVal": te,
 					"defaultVal": te,
 					"animateStyle": "",
 					"textStyle": {
-						"width":"",
-						"top": "50%",
-						"left": "45%",
+						"width":"80%",
+						"top": "calc(50% - "+ top/2 +"px)",
+						"left": "calc(50% - 40%)",
 						"z-index": $('.dragtext').length+$('.dragpicture').length+1,
 						"color": "#000000",
 						"font-size": data,
-						"text-align": "",
+						"text-align": "center",
 						"writing-mode": "",
 						"font-weight":"500",
+						"font-style":"normal",
+						"text-decoration":"none",
 						"font-family": "",
 						"letter-spacing": "",
 						"line-height": "1"
@@ -192,7 +196,6 @@
 				})
 			},
 			showRdrop(left,top,index,type){
-				console.log(left,top,index,type)
 				var _self = this;
 				this.removeIndex = index;
 				this.removeType = type
@@ -275,9 +278,9 @@
 //					window.event.returnValue = false;
 //				}
 //			}
-//			document.oncontextmenu = function() {　　
-//				return false;
-//			}
+			document.oncontextmenu = function() {　　
+				return false;
+			}
 			$('#editorPage').click(function(e){
 				var target = $(e.target);
 				if(target.closest(".zrcontent").length != 0) return;
@@ -403,6 +406,7 @@
 					width: 405px !important;
 					height: 720px !important;
 					background-color: white;
+					margin-top: -20px;
 					overflow: hidden;
 					user-select: none;
 					position: relative;
