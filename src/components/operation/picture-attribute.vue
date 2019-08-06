@@ -25,6 +25,24 @@
 						<img class="imgBox" :src="list.url"></img>
 					</div>
 				</div>
+				<div class="fontSet" style="padding-bottom: 16px;">
+					<div class="item">
+						<span>透明</span>
+						<re-gan v-if="receivedData !== ''" :sliderVal='opVal' :max="'100'" @reganway='changeOP'></re-gan>
+					</div>
+					<!--<div class="item">
+						<span>圆角</span>
+						<re-gan v-if="receivedData !== ''" :sliderVal='sliderVal' :max="'360'" @reganway='changeRange'></re-gan>
+					</div>-->
+					<div class="item">
+						<span>旋转</span>
+						<re-gan v-if="receivedData !== ''" :sliderVal='sliderVal' :max="'360'" :type="'transform'" @reganway='changeRange'></re-gan>
+					</div>
+					<!--<div class="item">
+						<span>阴影</span>
+						<re-gan v-if="receivedData !== ''" :sliderVal='sliderVal' :max="'360'" @reganway='changeRange'></re-gan>
+					</div>-->
+				</div>
 			</div>
 		</div>
 		<div id="animateSet" class="ui fluid accordion" v-show="setType == 'animateSet'">
@@ -43,6 +61,7 @@
 </template>
 
 <script>
+	import Regan from '../common-item/regan';
 	export default {
 		props: ['boxShow'],
 		data() {
@@ -50,6 +69,8 @@
 				setType: 'textSet',
 				receivedData: '',
 				Tindex: '',
+				opVal:'',
+				sliderVal: '0',
 				align: [{
 					tooltip: "左对齐",
 					name: "left",
@@ -167,6 +188,8 @@
 			editPicture(data, index) {
 				var _self = this;
 				this.receivedData = data;
+				this.opVal = 100-this.receivedData.imgStyle.opacity*100;
+				this.sliderVal = this.receivedData.imgStyle.transform.replace(/[^0-9]/ig, "");
 				this.Tindex = index
 			},
 			togglePage(type) {
@@ -193,6 +216,20 @@
 				}
 				document.getElementsByClassName('dragpicture')[index].style.top = this.receivedData.imgStyle.top;
 				document.getElementsByClassName('dragpicture')[index].style.left = this.receivedData.imgStyle.left
+			},
+			changeOP(data){
+				var _self = this;
+				var index = _self.Tindex;
+				var y = data/100;
+				this.receivedData.imgStyle.opacity = (1-data/100).toFixed(2)
+				document.getElementsByClassName('dragpicture')[index].style.opacity = 1-data/100
+			},
+			changeRange(data){
+				var _self = this;
+				var index = _self.Tindex;
+				_self.sliderVal = data;
+				_self.receivedData.imgStyle['transform'] = 'rotate(' + data + 'deg)';
+				document.getElementsByClassName('dragpicture')[index].style.transform = 'rotate(' + data + 'deg)'
 			},
 			setLevel(inx) {
 				var _self = this;
@@ -285,7 +322,7 @@
 
 		},
 		components: {
-
+			're-gan':Regan
 		}
 
 	}
@@ -328,6 +365,17 @@
 				}
 				.formSytle:last-child {
 					border-bottom: none;
+				}
+				.fontSet {
+					padding: 8px;
+					border-bottom: 1px solid #e1e1e1 !important;
+					user-select: none;
+					span{
+						font-size: 12px;
+					}
+					.item{
+						margin-top: 10px;
+					}
 				}
 			}
 			#levelBox {

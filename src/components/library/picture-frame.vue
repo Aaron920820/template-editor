@@ -39,7 +39,10 @@
 				for(let mutation of mutationList) {
 //					console.log(mutation)
 					_self.imgMsg.imgStyle.top = mutation.target.style.top;
-					_self.imgMsg.imgStyle.left = mutation.target.style.left
+					_self.imgMsg.imgStyle.left = mutation.target.style.left;
+					_self.imgMsg.imgStyle.width = mutation.target.style.width;
+					_self.imgMsg.imgStyle.height = mutation.target.style.height;
+					_self.imgMsg.imgStyle.transform = mutation.target.style.transform
 				}
 			});
 			this.observer.observe(element, {

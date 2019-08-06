@@ -44,7 +44,7 @@
 					<div class="item" :class="{'itemActive':receivedData.textStyle['text-align'] == 'center'}" @click="textAlign('center')" data-tooltip="居中对齐文本" data-inverted="">
 						<icon name="text-center" :w="22" :h="22"></icon>
 					</div>
-					<div class="item" :class="{'itemActive':receivedData.textStyle['text-align'] == 'right'}"  @click="textAlign('right')"data-tooltip="右对齐文本" data-inverted="">
+					<div class="item" :class="{'itemActive':receivedData.textStyle['text-align'] == 'right'}" @click="textAlign('right')" data-tooltip="右对齐文本" data-inverted="">
 						<icon name="text-right" :w="22" :h="22"></icon>
 					</div>
 				</div>
@@ -57,13 +57,10 @@
 					</div>
 				</div>
 				<div class="fontSet">
-					<div class="zritem">
-						字体
-					</div>
 					<div style="font-size: 12px;">
 						大小
 						<div class="ui selection dropdown" id="fontSizeDrop" style="min-width: 30px;width: 80px;margin-left: 14px;">
-							<input type="hidden" name="gender" v-model="fontSizeVal">
+							<input type="hidden" name="gender">
 							<i class="dropdown icon" style="line-height: 0.8;"></i>
 							<div class="default text">大小</div>
 							<div class="menu">
@@ -76,6 +73,27 @@
 						</div>
 					</div>
 				</div>
+				<div class="fontSet">
+					<div style="font-size: 12px;">
+						行距
+						<div class="ui selection dropdown" id="lineHeightDrop" style="min-width: 30px;width: 80px;margin-left: 14px;">
+							<input type="hidden" name="gender">
+							<i class="dropdown icon" style="line-height: 0.8;"></i>
+							<div class="default text">行距</div>
+							<div class="menu">
+								<div class="item" :data-value="list.val" v-for="list in lineHeightList" v-text="list.text"></div>
+							</div>
+						</div>
+						<div class="ui mini basic icon buttons">
+							<button class="ui button" @click="addLineHeight"><i class="plus icon"></i></button>
+							<button class="ui button" @click="cutLineHeight"><i class="minus icon"></i></button>
+						</div>
+					</div>
+				</div>
+				<div class="fontSet" style="padding-bottom: 16px;">
+					<span>旋转</span>
+					<re-gan v-if="receivedData !== ''" :sliderVal='sliderVal' :max="'360'" :type="'transform'" @reganway='changeRange'></re-gan>
+				</div>
 			</div>
 		</div>
 		<div id="animateSet" class="ui fluid accordion" v-show="setType == 'animateSet'">
@@ -84,6 +102,7 @@
 				<div class="animatino-list">
 					<div class="animation-item" v-for="item in animateList">
 						<div class="animation-icon" :class="{'animation-icon-click':item.className == receivedData.animateStyle}" @click="setAnimate(item.className)" :style="item.bpStyle"></div>
+						
 						<div class="animation-name">{{item.text}}</div>
 					</div>
 				</div>
@@ -95,6 +114,7 @@
 
 <script>
 	import { Chrome } from 'vue-color'
+	import Regan from '../common-item/regan'
 	export default {
 		props: [],
 		data() {
@@ -102,7 +122,7 @@
 				setType: 'textSet',
 				receivedData: '',
 				Tindex: '',
-				fontSizeVal: '',
+				sliderVal: '0',
 				pickerShow: false,
 				colors: '#000000',
 				align: [{
@@ -144,6 +164,37 @@
 					url: require('../../../static/backgroundImages/bottomLevel.png')
 				}],
 				fontsizeList: ['12px', '13px', '14px', '16px', '18px', '20px', '22px', '26px', '28px', '32px', '36px', '48px'],
+				lineHeightList: [{
+					text: '0.5倍',
+					val: '0.5'
+				}, {
+					text: '1倍',
+					val: '1'
+				}, {
+					text: '1.2倍',
+					val: '1.2'
+				}, {
+					text: '1.5倍',
+					val: '1.5'
+				}, {
+					text: '1.8倍',
+					val: '1.8'
+				}, {
+					text: '2倍',
+					val: '2'
+				}, {
+					text: '2.5倍',
+					val: '2.5'
+				}, {
+					text: '3倍',
+					val: '3'
+				}, {
+					text: '3.5倍',
+					val: '3.5'
+				}, {
+					text: '4倍',
+					val: '4'
+				}],
 				animateList: [{
 						text: '淡入',
 						className: 'fadeIn animated',
@@ -244,9 +295,10 @@
 				var _self = this;
 				this.receivedData = data;
 				this.Tindex = index;
-				this.colors = this.receivedData.textStyle.color
-				this.fontSizeVal = this.receivedData.textStyle['font-size']
+				this.colors = this.receivedData.textStyle.color;
+				this.sliderVal = this.receivedData.textStyle.transform.replace(/[^0-9]/ig, "");
 				$('#fontSizeDrop').dropdown("set text", _self.receivedData.textStyle['font-size'])
+				$('#lineHeightDrop').dropdown("set text", _self.receivedData.textStyle['line-height'] + '倍')
 				$('#picker').css('background', _self.receivedData.textStyle.color)
 			},
 			togglePage(type) {
@@ -287,7 +339,7 @@
 
 			},
 			//斜体
-			fontItalic(){
+			fontItalic() {
 				var index = this.Tindex;
 				if(this.receivedData.textStyle['font-style'] == 'italic') {
 					this.receivedData.textStyle['font-style'] = 'normal';
@@ -297,7 +349,7 @@
 				document.getElementsByClassName('dragtext')[index].style['font-style'] = this.receivedData.textStyle['font-style']
 			},
 			//下划线
-			fontDecoration(){
+			fontDecoration() {
 				var index = this.Tindex;
 				console.log(this.receivedData.textStyle['text-decoration'])
 				if(this.receivedData.textStyle['text-decoration'] == 'underline') {
@@ -307,7 +359,7 @@
 				}
 				document.getElementsByClassName('dragtext')[index].style['text-decoration'] = this.receivedData.textStyle['text-decoration']
 			},
-			textAlign(type){
+			textAlign(type) {
 				var index = this.Tindex;
 				this.receivedData.textStyle['text-align'] = type;
 				document.getElementsByClassName('dragtext')[index].style['text-align'] = this.receivedData.textStyle['text-align']
@@ -335,9 +387,35 @@
 				var num = this.receivedData.textStyle['font-size'].substring(0, this.receivedData.textStyle['font-size'].length - 2);
 				if(num > 12) {
 					num--;
+					this.receivedData.textStyle['font-size'] = num + 'px';
+					$('#fontSizeDrop').dropdown("set text", _self.receivedData.textStyle['font-size']);
 				};
-				this.receivedData.textStyle['font-size'] = num + 'px';
-				$('#fontSizeDrop').dropdown("set text", _self.receivedData.textStyle['font-size']);
+			},
+			//增加行距
+			addLineHeight() {
+				var _self = this;
+				var num = this.receivedData.textStyle['line-height'];
+				var newNum = Number(num) + 0.1;
+				this.receivedData.textStyle['line-height'] = newNum.toFixed(1);
+				$('#lineHeightDrop').dropdown("set text", _self.receivedData.textStyle['line-height'] + '倍');
+
+			},
+			changeRange(data){
+				var _self = this;
+				_self.sliderVal = data;
+				_self.receivedData.textStyle['transform'] = 'rotate(' + data + 'deg)';
+				document.getElementsByClassName('dragtext')[_self.Tindex].style.transform = 'rotate(' + data + 'deg)'
+			},
+			cutLineHeight() {
+				var _self = this;
+				var newNum;
+				var num = this.receivedData.textStyle['line-height'];
+				if(num > 0.5) {
+					var s = Number(num) - 0.1;
+					newNum = s.toFixed(1)
+					this.receivedData.textStyle['line-height'] = newNum;
+					$('#lineHeightDrop').dropdown("set text", _self.receivedData.textStyle['line-height'] + '倍');
+				};
 			},
 			//设置动画
 			setAnimate(data) {
@@ -424,8 +502,12 @@
 			//semantic-ui下拉框回调函数
 			$('#fontSizeDrop').dropdown({
 				onChange: function(value, text, $selectedItem) {
-					console.log(value)
 					_self.receivedData.textStyle['font-size'] = value
+				}
+			});
+			$('#lineHeightDrop').dropdown({
+				onChange: function(value, text, $selectedItem) {
+					_self.receivedData.textStyle['line-height'] = value
 				}
 			});
 			//点击颜色选择器以外关闭
@@ -434,11 +516,20 @@
 				if(target.closest("#chromePicker").length !== 0 || target.closest("#picker").length !== 0) return;
 				_self.pickerShow = false
 			});
-			$('.animation-icon').css('background-image', 'url(' + require("../../../static/backgroundImages/animBackground.png") + ')')
-
+//			$('.animation-icon').css('background-image', 'url(' + require("../../../static/backgroundImages/animBackground.png") + ')');
+//			var slider = document.getElementById('slider');
+//			slider.addEventListener('input', function(e) {
+//				_self.sliderVal = e.target.value
+//				var x = e.target.value - 30
+//				$('#sliderDiv').css('width', x / 2 + 'px')
+//				_self.receivedData.textStyle['transform'] = 'rotate(' + e.target.value + 'deg)'
+//				//		        console.log(_self.receivedData.textStyle)
+//				document.getElementsByClassName('dragtext')[_self.Tindex].style.transform = 'rotate(' + e.target.value + 'deg)'
+//			});
 		},
 		components: {
-			'chrome-picker': Chrome
+			'chrome-picker': Chrome,
+			're-gan':Regan
 		}
 
 	}
@@ -505,11 +596,8 @@
 					padding: 8px;
 					border-bottom: 1px solid #e1e1e1 !important;
 					user-select: none;
-					.zritem {
-						width: auto;
+					span{
 						font-size: 12px;
-						margin-right: 10px;
-						line-height: 32px;
 					}
 				}
 			}
@@ -546,6 +634,8 @@
 					cursor: pointer;
 					margin: 0 auto;
 					background-size: 228px 348px;
+					background-image: url(../../assets/animBackground.png);
+					
 				}
 				.animation-icon-click {
 					background-image: url(../../../static/backgroundImages/maka_anim_enter_seleted.png) !important;

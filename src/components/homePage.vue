@@ -77,7 +77,7 @@
 	import pictureFrame from './library/picture-frame'
 	import textAttribute from './operation/text-attribute'
 	import pictureAttribute from './operation/picture-attribute'
-	import Rdrop from './right-key-dropdown'
+	import Rdrop from './common-item/right-key-dropdown'
 	export default {
 		data() {
 			return {
@@ -156,7 +156,8 @@
 						"text-decoration":"none",
 						"font-family": "",
 						"letter-spacing": "",
-						"line-height": "1"
+						"line-height": "1",
+						"transform":"rotate(0deg)"
 					}
 				}
 				_self.mainData.textbox.push(item);
@@ -176,7 +177,9 @@
 						"width": width * 2 + 'px',
 						"height": height * 2 + 'px',
 						"z-index": $('.dragtext').length+$('.dragpicture').length+1,
-						"background-image": 'url(' + imgBase + ')'
+						"background-image": 'url(' + imgBase + ')',
+						"opacity":'1',
+						"transform":"rotate(0deg)"
 					}
 				}
 				_self.mainData.imgbox.push(item);
