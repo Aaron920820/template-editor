@@ -9,7 +9,7 @@
 			<div class="title active"><i class="dropdown icon"></i>图片设置</div>
 			<div class="content active">
 				<div class="formSytle zrBox" id="alignBox">
-					<div class="item">
+					<div class="item itemTitle">
 						对齐
 					</div>
 					<div @click="setAlign(index)" v-for="(list,index) in align" class="item" :data-tooltip="list.tooltip" data-inverted="">
@@ -17,31 +17,31 @@
 					</div>
 				</div>
 				<div class="formSytle zrBox" id="levelBox">
-					<div class="item">
+					<div class="item itemTitle">
 						图层
 					</div>
 					<div v-for="(list,index) in level" @click="setLevel(index)" class="item" :data-tooltip="list.tooltip" data-inverted="">
 						<!--<icon :name="list.name" :w="list.size" :h="list.size"></icon>-->
-						<img class="imgBox" :src="list.url"></img>
+						<img class="imgBox" draggable="false" :src="list.url"></img>
 					</div>
 				</div>
 				<div class="fontSet" style="padding-bottom: 16px;">
 					<div class="item">
 						<span>透明</span>
-						<re-gan v-if="receivedData !== ''" :sliderVal='opVal' :max="'100'" @reganway='changeOP'></re-gan>
+						<re-gan v-if="receivedData !== ''" :sliderVal='parseInt(100-this.receivedData.imgStyle.opacity*100)' :max="'100'" :unit="'%'" @reganway='changeOP'></re-gan>
 					</div>
-					<!--<div class="item">
+					<div class="item">
 						<span>圆角</span>
-						<re-gan v-if="receivedData !== ''" :sliderVal='sliderVal' :max="'360'" @reganway='changeRange'></re-gan>
-					</div>-->
+						<re-gan v-if="receivedData !== ''" :sliderVal='receivedData.imgStyle["border-radius"].replace(/%/, "")' :max="'50'" :unit="'%'" @reganway='changeRadius'></re-gan>
+					</div>
 					<div class="item">
 						<span>旋转</span>
-						<re-gan v-if="receivedData !== ''" :sliderVal='sliderVal' :max="'360'" :type="'transform'" @reganway='changeRange'></re-gan>
+						<re-gan v-if="receivedData !== ''" :sliderVal='receivedData.imgStyle.transform.replace(/[^0-9]/ig, "")' :max="'360'" :unit="'°'" @reganway='changeRange'></re-gan>
 					</div>
-					<!--<div class="item">
+					<div class="item">
 						<span>阴影</span>
-						<re-gan v-if="receivedData !== ''" :sliderVal='sliderVal' :max="'360'" @reganway='changeRange'></re-gan>
-					</div>-->
+						<re-gan v-if="receivedData !== ''" :sliderVal='parseInt(receivedData.imgStyle["box-shadow"].replace(/black 0px 0px /,""))' :max="'50'" :unit="'px'" @reganway='changeShadow'></re-gan>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -69,8 +69,6 @@
 				setType: 'textSet',
 				receivedData: '',
 				Tindex: '',
-				opVal:'',
-				sliderVal: '0',
 				align: [{
 					tooltip: "左对齐",
 					name: "left",
@@ -188,8 +186,6 @@
 			editPicture(data, index) {
 				var _self = this;
 				this.receivedData = data;
-				this.opVal = 100-this.receivedData.imgStyle.opacity*100;
-				this.sliderVal = this.receivedData.imgStyle.transform.replace(/[^0-9]/ig, "");
 				this.Tindex = index
 			},
 			togglePage(type) {
@@ -224,12 +220,23 @@
 				this.receivedData.imgStyle.opacity = (1-data/100).toFixed(2)
 				document.getElementsByClassName('dragpicture')[index].style.opacity = 1-data/100
 			},
+			changeRadius(data){
+				var _self = this;
+				var index = _self.Tindex;
+				this.receivedData.imgStyle['border-radius'] = data+'%';
+				document.getElementsByClassName('dragpicture')[index].style['border-radius'] = data+'%';
+			},
 			changeRange(data){
 				var _self = this;
 				var index = _self.Tindex;
-				_self.sliderVal = data;
 				_self.receivedData.imgStyle['transform'] = 'rotate(' + data + 'deg)';
 				document.getElementsByClassName('dragpicture')[index].style.transform = 'rotate(' + data + 'deg)'
+			},
+			changeShadow(data){
+				var _self = this;
+				var index = _self.Tindex;
+				this.receivedData.imgStyle['box-shadow'] = 'black 0px 0px '+data+'px';
+				document.getElementsByClassName('dragpicture')[index].style['box-shadow'] = 'black 0px 0px '+data+'px';
 			},
 			setLevel(inx) {
 				var _self = this;
@@ -306,17 +313,11 @@
 				$(this).addClass('active')
 			})
 			$('.ui.accordion').accordion();
-			$('.zrBox .item').not(":first").mousedown(function() {
-				$(this).css({
-					'background': '#00c4cd',
-					'color': 'rgb(255,255,255)'
-				})
-				$(this).mouseup(function() {
-					$(this).css({
-						'background': '',
-						'color': '#7d8893'
-					})
-				})
+			$('.zrBox .item').not(".itemTitle").mousedown(function() {
+				$(this).addClass('itemActive')
+			})
+			$(document).mouseup(function() {
+				$('.zrBox .item').not(".itemTitle").removeClass('itemActive')
 			})
 			$('.animation-icon').css('background-image', 'url('+require("../../../static/backgroundImages/animBackground.png")+')')
 
@@ -361,6 +362,11 @@
 					}
 					.item:hover:not(:first-child) {
 						background-color: rgb(236, 236, 236);
+						cursor: pointer
+					}
+					.itemActive {
+						background: #ffad70 !important;
+						color: rgb(255, 255, 255) !important
 					}
 				}
 				.formSytle:last-child {

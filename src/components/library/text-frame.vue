@@ -56,11 +56,10 @@
 			let element = document.getElementsByClassName('dragtext')[_self.textIndex]
 			this.observer = new MutationObserver((mutationList) => {
 				for(let mutation of mutationList) {
-//					console.log(mutation)
 					_self.psMsg.textStyle.top = mutation.target.style.top;
 					_self.psMsg.textStyle.left = mutation.target.style.left;
 					_self.psMsg.textStyle.width = mutation.target.style.width;
-					_self.psMsg.textStyle.transform = mutation.target.style.transform
+					_self.psMsg.textStyle.transform = mutation.target.style.transform;
 				}
 			});
 			this.observer.observe(element, {

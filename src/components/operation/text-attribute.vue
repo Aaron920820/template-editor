@@ -9,7 +9,7 @@
 			<div class="title active"><i class="dropdown icon"></i>文本设置</div>
 			<div class="content active">
 				<div class="formSytle zrBox" id="alignBox">
-					<div class="item">
+					<div class="item itemTitle">
 						对齐
 					</div>
 					<div @click="setAlign(index)" v-for="(list,index) in align" class="item" :data-tooltip="list.tooltip" data-inverted="">
@@ -17,12 +17,12 @@
 					</div>
 				</div>
 				<div class="formSytle zrBox" id="levelBox">
-					<div class="item">
+					<div class="item itemTitle">
 						图层
 					</div>
 					<div v-for="(list,index) in level" @click="setLevel(index)" class="item" :data-tooltip="list.tooltip" data-inverted="">
 						<!--<icon :name="list.name" :w="list.size" :h="list.size"></icon>-->
-						<img class="imgBox" :src="list.url"></img>
+						<img class="imgBox" draggable="false" :src="list.url"></img>
 					</div>
 				</div>
 				<div class="formSytle" v-if="receivedData !== ''">
@@ -50,7 +50,7 @@
 				</div>
 				<div class="formSytle" style="border-bottom: none !important;">
 					<div class="item">
-						颜色
+						颜色与透明度
 					</div>
 					<div id="picker" @click="colorChange">
 						<chrome-picker id="chromePicker" v-show='pickerShow' v-model="colors" @input="updateValue"></chrome-picker>
@@ -92,7 +92,7 @@
 				</div>
 				<div class="fontSet" style="padding-bottom: 16px;">
 					<span>旋转</span>
-					<re-gan v-if="receivedData !== ''" :sliderVal='sliderVal' :max="'360'" :type="'transform'" @reganway='changeRange'></re-gan>
+					<re-gan v-if="receivedData !== ''" :sliderVal='receivedData.textStyle.transform.replace(/[^0-9]/ig, "")' :max="'360'"  :unit="'°'" @reganway='changeRange'></re-gan>
 				</div>
 			</div>
 		</div>
@@ -122,7 +122,6 @@
 				setType: 'textSet',
 				receivedData: '',
 				Tindex: '',
-				sliderVal: '0',
 				pickerShow: false,
 				colors: '#000000',
 				align: [{
@@ -296,7 +295,6 @@
 				this.receivedData = data;
 				this.Tindex = index;
 				this.colors = this.receivedData.textStyle.color;
-				this.sliderVal = this.receivedData.textStyle.transform.replace(/[^0-9]/ig, "");
 				$('#fontSizeDrop').dropdown("set text", _self.receivedData.textStyle['font-size'])
 				$('#lineHeightDrop').dropdown("set text", _self.receivedData.textStyle['line-height'] + '倍')
 				$('#picker').css('background', _self.receivedData.textStyle.color)
@@ -402,8 +400,7 @@
 			},
 			changeRange(data){
 				var _self = this;
-				_self.sliderVal = data;
-				_self.receivedData.textStyle['transform'] = 'rotate(' + data + 'deg)';
+				_self.receivedData.textStyle.transform = 'rotate(' + data + 'deg)';
 				document.getElementsByClassName('dragtext')[_self.Tindex].style.transform = 'rotate(' + data + 'deg)'
 			},
 			cutLineHeight() {
@@ -493,12 +490,12 @@
 				$(this).addClass('active')
 			});
 			$('.ui.accordion').accordion();
-			$('.zrBox .item').not(":first").mousedown(function() {
+			$('.zrBox .item').not(".itemTitle").mousedown(function() {
 				$(this).addClass('itemActive')
-				$(this).mouseup(function() {
-					$(this).removeClass('itemActive')
-				})
 			});
+			$(document).mouseup(function() {
+				$('.zrBox .item').not(".itemTitle").removeClass('itemActive')
+			})
 			//semantic-ui下拉框回调函数
 			$('#fontSizeDrop').dropdown({
 				onChange: function(value, text, $selectedItem) {
@@ -516,16 +513,6 @@
 				if(target.closest("#chromePicker").length !== 0 || target.closest("#picker").length !== 0) return;
 				_self.pickerShow = false
 			});
-//			$('.animation-icon').css('background-image', 'url(' + require("../../../static/backgroundImages/animBackground.png") + ')');
-//			var slider = document.getElementById('slider');
-//			slider.addEventListener('input', function(e) {
-//				_self.sliderVal = e.target.value
-//				var x = e.target.value - 30
-//				$('#sliderDiv').css('width', x / 2 + 'px')
-//				_self.receivedData.textStyle['transform'] = 'rotate(' + e.target.value + 'deg)'
-//				//		        console.log(_self.receivedData.textStyle)
-//				document.getElementsByClassName('dragtext')[_self.Tindex].style.transform = 'rotate(' + e.target.value + 'deg)'
-//			});
 		},
 		components: {
 			'chrome-picker': Chrome,
@@ -568,9 +555,10 @@
 					}
 					.item:hover:not(:first-child) {
 						background-color: rgb(236, 236, 236);
+						cursor: pointer
 					}
 					.itemActive {
-						background: #00c4cd !important;
+						background: #ffad70 !important;
 						color: rgb(255, 255, 255) !important
 					}
 					#picker {

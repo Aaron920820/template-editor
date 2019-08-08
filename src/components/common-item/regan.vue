@@ -1,40 +1,71 @@
 <template>
 	<div class="zr_regan">
-		<div id="sliderDiv"></div>
-		<input id='slider' type='range' @input="listener($event)" min='0' :max='max' step='0' :value='sliderVal' />
-		<input v-if="type == 'transform'" id="numSelect" :value="sliderVal" @input="numRange($event)" min="0" type="number" />
+		<div class="sliderDiv" ref='div'></div>
+		<input type='range' @mousedown="mousedown($event)" @mouseup="mouseup($event)" @input="listener($event)" min='0' :max='max' step='0' :value='sliderVal' />
+		<input class="numSelect" :value="sliderVal" @input="numRange($event)" min="0" type="number" />
+		<div class="unit">
+			<span v-text="unit"></span>
+		</div>
 	</div>
 </template>
 
 <script>
 	export default {
-		props: ['max', 'sliderVal','type'],
+		props: ['max', 'sliderVal','unit'],
 		data() {
 			return {
-				
+
 			}
 		},
 		methods: {
-			listener(e){
+			listener(e) {
 				var _self = this;
-//				var x = e.target.value - 30;
-//				$('#sliderDiv').css('width', x / 2 + 'px');
 				this.$emit('reganway', e.target.value)
 			},
 			numRange(e) {
 				var _self = this;
-				if(Number(e.target.value) <= _self.max){
-//					var x = e.target.value - 30;
-//					$('#sliderDiv').css('width', x / 2 + 'px');
+				if(Number(e.target.value) <= _self.max) {
 					this.$emit('reganway', e.target.value)
-				}else{
+				} else {
 					e.target.value = _self.max
 				}
+			},
+			mousedown(e) {
+				e.target.onmousemove = (e) => {
+					if(9 <= e.offsetX && e.offsetX < 175) {
+						e.target.previousElementSibling.style.width = e.offsetX - 9 + 'px';
+					} else if(e.offsetX <= 0) {
+						e.target.previousElementSibling.style.width = '0px';
+					} else if(e.offsetX > 175) {
+						e.target.previousElementSibling.style.width = '165px';
+					}
+				};
+			},
+			mouseup(e) {
+				e.target.onmousemove = null;
 			}
 		},
 		mounted() {
-//			var x = this.sliderVal - 30;
-//			$('#sliderDiv').css('width', x / 2 + 'px');
+			var _self = this
+			var k = (_self.max / 180).toFixed(2)
+			var x = this.sliderVal;
+			this.$refs.div.style.width = (x / k) - 15 + 'px';
+			if((x / k) - 15 < 0) {
+				this.$refs.div.style.width = '0px'
+			}
+		},
+		watch: {
+			sliderVal: {　　　　
+				handler(newValue, oldValue) {
+					var _self = this
+					var k = (_self.max / 180).toFixed(2)
+					_self.$refs.div.style.width = (newValue/k)-15 + 'px'
+					if((newValue/k)-15 < 0) {
+						_self.$refs.div.style.width = '0px'
+					}
+				},
+				　　　　deep: true　　
+			}
 		}
 	}
 </script>
@@ -43,13 +74,18 @@
 	.zr_regan {
 		margin-top: 10px;
 		position: relative;
-		#sliderDiv {
+		.sliderDiv {
 			position: absolute;
 			top: 12px;
 			height: 2px;
 			z-index: 2;
 			width: 0px;
 			background: #ffad70;
+		}
+		.unit{
+			position: absolute;
+			top: 4px;
+			right: 17px;
 		}
 		input[type=range] {
 			-webkit-appearance: none;
@@ -124,13 +160,13 @@
 			background: #E6EFFB;
 			border: none;
 		}
-		#numSelect {
+		.numSelect {
 			float: right;
 			width: 60px;
 			height: 26px;
 			border: 1px solid #e1e1e1;
 			border-radius: 3px;
-			text-align: center;
+			padding-left: 6px;
 		}
 	}
 </style>

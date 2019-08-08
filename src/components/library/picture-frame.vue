@@ -1,5 +1,5 @@
 <template>
-	<div class="dragpicture" :Id='imgMsg.imgId' :class="imgMsg.animateStyle" :style="imgMsg.imgStyle" @click="setImg(imgMsg)">
+	<div class="dragpicture" :Id='imgMsg.imgId' :class="imgMsg.animateStyle" :style="imgMsg.imgStyle" @click="setImg(imgMsg)" @click.right="rightEvent($event)">
 		<div class="zrcontent"></div>
 	</div>
 </template>
@@ -17,7 +17,13 @@
 			setImg(data) {
 				var _self = this;
 				this.$emit('setPicture',data,'pictureAttribute',_self.PictureIndex)
-			}
+			},
+			rightEvent($event){
+				var _self = this;
+				var left = $event.clientX - document.getElementById('editorPage').offsetLeft - document.getElementById('editorIndex').offsetLeft;
+				var top = $event.clientY - document.getElementById('editorPage').offsetTop - document.getElementById('editorIndex').offsetTop;
+				this.$emit('showRdrop',left+5,top+5,_self.PictureIndex,'imgbox')
+			},
 		},
 		created() {
 

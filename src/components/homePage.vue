@@ -36,7 +36,7 @@
 			<div id="editorIndex" class="thirteen wide column">
 				<div id="editorPage" :style='mainData.templateBackgroundImg'>
 					<text-frame v-for="(item,index) in mainData.textbox" :key="index+item.textId" :psMsg="item" :textIndex="index" @setText="setText" @showRdrop="showRdrop"></text-frame>
-					<picture-frame v-for="(img,inx) in mainData.imgbox" :key="inx+img.imgId" :imgMsg="img" :PictureIndex="inx" @setPicture="setPicture"></picture-frame>
+					<picture-frame v-for="(img,inx) in mainData.imgbox" :key="inx+img.imgId" :imgMsg="img" :PictureIndex="inx" @setPicture="setPicture" @showRdrop="showRdrop"></picture-frame>
 					<!--右键选项框-->
 					<rdrop @remove='removeItem' v-if="dropShow" :pTop="rTop" :pLeft="rLeft" :removeType="removeType" :removeIndex="removeIndex"></rdrop>
 				</div>
@@ -112,9 +112,6 @@
 				removeIndex:''
 			}
 		},
-		watch:{
-//			mainData:'changeData'
-		},
 		methods: {
 			changeData(val){
 				var _self = this;
@@ -179,7 +176,9 @@
 						"z-index": $('.dragtext').length+$('.dragpicture').length+1,
 						"background-image": 'url(' + imgBase + ')',
 						"opacity":'1',
-						"transform":"rotate(0deg)"
+						"transform":"rotate(0deg)",
+						"border-radius":"0%",
+						"box-shadow":"black 0px 0px 0px"
 					}
 				}
 				_self.mainData.imgbox.push(item);
@@ -284,9 +283,16 @@
 			document.oncontextmenu = function() {　　
 				return false;
 			}
-			$('#editorPage').click(function(e){
+//			$('#editorPage').click(function(e){
+//				var target = $(e.target);
+//				if(target.closest(".zrcontent").length != 0 || target.closest(".border_all").length != 0) return;
+//				$(".border_all").hide();
+//				$(".zrcontent").removeClass('onafter');
+//				_self.operationView = ''
+//			})
+			$('#editorPage').mousedown(function(e){
 				var target = $(e.target);
-				if(target.closest(".zrcontent").length != 0) return;
+				if(target.closest(".zrcontent").length != 0 || target.closest(".border_all").length != 0) return;
 				$(".border_all").hide();
 				$(".zrcontent").removeClass('onafter');
 				_self.operationView = ''
